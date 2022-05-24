@@ -1,0 +1,11 @@
+package KieRule;
+
+import com.sbnz.studycalendar.model.Subject;
+
+rule "Example"
+    when
+        s: Subject(name == "SBNZ")
+    then
+        s.setGrade(10);
+        update(s);
+end 
