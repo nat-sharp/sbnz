@@ -7,10 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Subject {
-	private String name;
-	private boolean passed;
-	private int grade;
+public class StudyCalendar {
 	private Student student;
-	private List<Obligation> obligations;
+	private List<StudySession> studySessions;
 }
