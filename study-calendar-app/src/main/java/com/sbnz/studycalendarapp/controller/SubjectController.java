@@ -1,7 +1,9 @@
-package com.sbnz.studycalendar.controller;
+package com.sbnz.studycalendarapp.controller;
 
-import com.sbnz.studycalendar.model.Subject;
-import com.sbnz.studycalendar.service.SubjectService;
+
+
+import com.sbnz.studycalendarapp.model.Subject;
+import com.sbnz.studycalendarapp.service.SubjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,7 @@ public class SubjectController {
 	
 	@GetMapping()
 	public ResponseEntity<Subject> getSubject(@RequestParam String name) {
-		Subject s = new Subject();
-		s.setName(name);
+		Subject s = new Subject(name, true, 6);
 		s = service.getGradedSubject(s);
 				
 		return new ResponseEntity<>(s, HttpStatus.OK);

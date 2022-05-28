@@ -1,4 +1,5 @@
-package com.sbnz.studycalendar;
+package com.sbnz.studycalendarapp;
+
 
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
@@ -7,15 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import lombok.extern.slf4j.Slf4j;
-
 @SpringBootApplication
-@Slf4j
-public class StudyCalendarApplication {
+public class StudyCalendarAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StudyCalendarApplication.class, args);
-		log.info("EVO POKRECEMO");
+		SpringApplication.run(StudyCalendarAppApplication.class, args);
 	}
 	
 	@Bean
