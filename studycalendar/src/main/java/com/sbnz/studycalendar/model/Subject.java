@@ -1,8 +1,9 @@
 package com.sbnz.studycalendar.model;
 
 import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,4 +22,6 @@ public class Subject implements Serializable{
 	private String name;
 	private boolean passed;
 	private int grade;
+	private Student student;
+	private List<Obligation> obligations;
 }
