@@ -1,7 +1,7 @@
 package com.sbnz.studycalendarapp.service;
 
-import com.sbnz.studycalendarapp.StudyCalendarAppApplication;
 import com.sbnz.studycalendarapp.model.Subject;
+import com.sbnz.studycalendarapp.repository.SubjectRepository;
 
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SubjectService {
 
-	private static Logger log = LoggerFactory.getLogger(StudyCalendarAppApplication.class);
+	@Autowired
+	private SubjectRepository repository;
+	
+	private static Logger log = LoggerFactory.getLogger(SubjectService.class);
 	
 	private final KieContainer kieContainer;
 	
