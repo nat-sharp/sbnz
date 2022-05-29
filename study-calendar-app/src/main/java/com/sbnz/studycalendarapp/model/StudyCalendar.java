@@ -4,11 +4,28 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="study_calendar")
 public class StudyCalendar implements Serializable{
 	
-	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
 	
+	@OneToOne(fetch=FetchType.LAZY)
 	private Student student;
+	
+	@OneToMany(mappedBy="studyCalendar", fetch=FetchType.LAZY, cascade= CascadeType.ALL)
 	private List<StudySession> studySessions;
 	
 	
@@ -16,12 +33,13 @@ public class StudyCalendar implements Serializable{
 		super();
 	}
 	
-	public StudyCalendar(Student student, List<StudySession> studySessions) {
+	public StudyCalendar(Integer id, Student student, List<StudySession> studySessions) {
 		super();
+		this.id = id;
 		this.student = student;
 		this.studySessions = studySessions;
 	}
-	
+
 	public Student getStudent() {
 		return student;
 	}
@@ -38,9 +56,17 @@ public class StudyCalendar implements Serializable{
 		this.studySessions = studySessions;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(student, studySessions);
+		return Objects.hash(id, student, studySessions);
 	}
 
 	@Override
@@ -52,14 +78,14 @@ public class StudyCalendar implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		StudyCalendar other = (StudyCalendar) obj;
-		return Objects.equals(student, other.student) && Objects.equals(studySessions, other.studySessions);
+		return Objects.equals(id, other.id) && Objects.equals(student, other.student)
+				&& Objects.equals(studySessions, other.studySessions);
 	}
+
 
 	@Override
 	public String toString() {
-		return "StudyCalendar [student=" + student + ", studySessions=" + studySessions + "]";
+		return "StudyCalendar [id=" + id + ", student=" + student + ", studySessions=" + studySessions + "]";
 	}
-	
-	
 
 }

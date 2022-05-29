@@ -4,14 +4,38 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="subject")
 public class Subject implements Serializable{
 
-	private static final long serialVersionUID = 1L;
-
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	
+	@Column(name="name")
 	private String name;
+	
+	@Column(name="passed")
 	private boolean passed;
+	
+	@Column(name="grade")
 	private int grade;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Student student;
+	
+	@OneToMany(mappedBy="subject", fetch= FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Obligation> obligations;
 	
 	
@@ -19,8 +43,19 @@ public class Subject implements Serializable{
 		super();
 	}
 	
-	public Subject(String name, boolean passed, int grade) {
+	public Subject(int id, String name, boolean passed, int grade, Student student, List<Obligation> obligations) {
 		super();
+		this.id = id;
+		this.name = name;
+		this.passed = passed;
+		this.grade = grade;
+		this.student = student;
+		this.obligations = obligations;
+	}
+
+	public Subject(int id, String name, boolean passed, int grade) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.passed = passed;
 		this.grade = grade;
@@ -49,12 +84,26 @@ public class Subject implements Serializable{
 	public void setGrade(int grade) {
 		this.grade = grade;
 	}
-	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Subject [id=" + id + ", name=" + name + ", passed=" + passed + ", grade=" + grade + ", student="
+				+ student + ", obligations=" + obligations + "]";
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(grade, name, obligations, passed, student);
+		return Objects.hash(grade, id, name, obligations, passed, student);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -64,16 +113,11 @@ public class Subject implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Subject other = (Subject) obj;
-		return grade == other.grade && Objects.equals(name, other.name)
+		return grade == other.grade && id == other.id && Objects.equals(name, other.name)
 				&& Objects.equals(obligations, other.obligations) && passed == other.passed
 				&& Objects.equals(student, other.student);
 	}
 	
-	@Override
-	public String toString() {
-		return "Subject [name=" + name + ", passed=" + passed + ", grade=" + grade + ", student=" + student
-				+ ", obligations=" + obligations + "]";
-	}
-	
+
 	
 }

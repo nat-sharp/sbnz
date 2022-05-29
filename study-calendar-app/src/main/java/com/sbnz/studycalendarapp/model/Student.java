@@ -4,34 +4,74 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import com.sbnz.studycalendarapp.enums.Day;
 import com.sbnz.studycalendarapp.enums.PartOfDay;
 import com.sbnz.studycalendarapp.enums.StudentActivity;
 import com.sbnz.studycalendarapp.enums.StudentCategory;
 
+@Entity
+@Table(name="student")
 public class Student implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
 	
+	@Column(name="first_name")
 	private String firstName;
+	
+	@Column(name="last_name")
 	private String lastName;
+	
+	@Column(name="username")
 	private String username;
+	
+	@Column(name="password")
 	private String password;
-	private boolean freeDayBeforeObligation;
+	
+	@Column(name="free_day_before_obligation")
+	private boolean freeDayBeforeObligation;//?
+	
+	@Column(name="concentrated_study_hours")
 	private boolean concetratedStudyHours;
+	
+	@Column(name="category")
 	private StudentCategory category;
+	
+	@Column(name="activity")
 	private StudentActivity activity;
-	private List<Day> studyDays;
-	private List<PartOfDay> partsOfStudyDays;
+	
+	
+//	private List<Day> studyDays; TODO
+//	private List<PartOfDay> partsOfStudyDays; TODO
+	
+	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Subject> subjects;
+	
+	@OneToOne(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private StudyCalendar studyCalendar;
+	
+	
 	public Student() {
 		super();
 	}
-	public Student(String firstName, String lastName, String username, String password, boolean freeDayBeforeObligation,
-			boolean concetratedStudyHours, StudentCategory category, StudentActivity activity, List<Day> studyDays,
-			List<PartOfDay> partsOfStudyDays, List<Subject> subjects, StudyCalendar studyCalendar) {
+	
+	public Student(Integer id, String firstName, String lastName, String username, String password,
+			boolean freeDayBeforeObligation, boolean concetratedStudyHours, StudentCategory category,
+			StudentActivity activity, List<Subject> subjects, StudyCalendar studyCalendar) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
@@ -40,11 +80,18 @@ public class Student implements Serializable{
 		this.concetratedStudyHours = concetratedStudyHours;
 		this.category = category;
 		this.activity = activity;
-		this.studyDays = studyDays;
-		this.partsOfStudyDays = partsOfStudyDays;
 		this.subjects = subjects;
 		this.studyCalendar = studyCalendar;
 	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -93,18 +140,18 @@ public class Student implements Serializable{
 	public void setActivity(StudentActivity activity) {
 		this.activity = activity;
 	}
-	public List<Day> getStudyDays() {
-		return studyDays;
-	}
-	public void setStudyDays(List<Day> studyDays) {
-		this.studyDays = studyDays;
-	}
-	public List<PartOfDay> getPartsOfStudyDays() {
-		return partsOfStudyDays;
-	}
-	public void setPartsOfStudyDays(List<PartOfDay> partsOfStudyDays) {
-		this.partsOfStudyDays = partsOfStudyDays;
-	}
+//	public List<Day> getStudyDays() {
+//		return studyDays;
+//	}
+//	public void setStudyDays(List<Day> studyDays) {
+//		this.studyDays = studyDays;
+//	}
+//	public List<PartOfDay> getPartsOfStudyDays() {
+//		return partsOfStudyDays;
+//	}
+//	public void setPartsOfStudyDays(List<PartOfDay> partsOfStudyDays) {
+//		this.partsOfStudyDays = partsOfStudyDays;
+//	}
 	public List<Subject> getSubjects() {
 		return subjects;
 	}
@@ -117,14 +164,13 @@ public class Student implements Serializable{
 	public void setStudyCalendar(StudyCalendar studyCalendar) {
 		this.studyCalendar = studyCalendar;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, category, concetratedStudyHours, firstName, freeDayBeforeObligation, lastName,
-				partsOfStudyDays, password, studyCalendar, studyDays, subjects, username);
+		return Objects.hash(activity, category, concetratedStudyHours, firstName, freeDayBeforeObligation, id, lastName,
+				password, studyCalendar, subjects, username);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -136,19 +182,19 @@ public class Student implements Serializable{
 		Student other = (Student) obj;
 		return activity == other.activity && category == other.category
 				&& concetratedStudyHours == other.concetratedStudyHours && Objects.equals(firstName, other.firstName)
-				&& freeDayBeforeObligation == other.freeDayBeforeObligation && Objects.equals(lastName, other.lastName)
-				&& Objects.equals(partsOfStudyDays, other.partsOfStudyDays) && Objects.equals(password, other.password)
-				&& Objects.equals(studyCalendar, other.studyCalendar) && Objects.equals(studyDays, other.studyDays)
-				&& Objects.equals(subjects, other.subjects) && Objects.equals(username, other.username);
-	}
-	@Override
-	public String toString() {
-		return "Student [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", password="
-				+ password + ", freeDayBeforeObligation=" + freeDayBeforeObligation + ", concetratedStudyHours="
-				+ concetratedStudyHours + ", category=" + category + ", activity=" + activity + ", studyDays="
-				+ studyDays + ", partsOfStudyDays=" + partsOfStudyDays + ", subjects=" + subjects + ", studyCalendar="
-				+ studyCalendar + "]";
+				&& freeDayBeforeObligation == other.freeDayBeforeObligation && Objects.equals(id, other.id)
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
+				&& Objects.equals(studyCalendar, other.studyCalendar) && Objects.equals(subjects, other.subjects)
+				&& Objects.equals(username, other.username);
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
+				+ ", password=" + password + ", freeDayBeforeObligation=" + freeDayBeforeObligation
+				+ ", concetratedStudyHours=" + concetratedStudyHours + ", category=" + category + ", activity="
+				+ activity + ", subjects=" + subjects + ", studyCalendar=" + studyCalendar + "]";
+	}
+
+
 }

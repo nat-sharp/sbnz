@@ -22,7 +22,8 @@ public class SubjectController {
 	
 	@GetMapping()
 	public ResponseEntity<Subject> getSubject(@RequestParam String name) {
-		Subject s = new Subject(name, true, 6);
+		Subject s = new Subject();
+		s.setName(name);
 		s = service.getGradedSubject(s);
 				
 		return new ResponseEntity<>(s, HttpStatus.OK);
