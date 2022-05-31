@@ -2,6 +2,7 @@ package com.sbnz.studycalendarapp.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.sbnz.studycalendarapp.dto.CreateObligationDto;
 import com.sbnz.studycalendarapp.enums.ObligationType;
 
 @Entity
@@ -30,13 +32,13 @@ public class Obligation implements Serializable{
 	private String name;
 	
 	@Column(name="date_and_time")
-	private LocalDate dateAndTime;
+	private LocalDateTime dateAndTime;
 	
 	@Column(name="study_start_date")
 	private LocalDate studyStartDate;
 	
 	@Column(name="study_end_date")
-	private LocalDate studyDateFinish;
+	private LocalDate studyEndDate;
 	
 	@Column(name="study_hours")
 	private int studyHours;
@@ -65,21 +67,28 @@ public class Obligation implements Serializable{
 	@OneToMany(mappedBy = "obligation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<StudySession> studySessions;
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+	private StudyCalendar studyCalendar;
+	
 	
 	public Obligation() {
 		super();
 	}
 	
-	public Obligation(Integer id, String name, LocalDate dateAndTime, LocalDate studyStartDate,
-			LocalDate studyDateFinish, int studyHours, int priority, ObligationType obligationType, Double maxPoints,
-			Double earnedPoints, boolean passed, boolean corrigible, Subject subject,
-			List<StudySession> studySessions) {
+
+	
+
+	
+	public Obligation(Integer id, String name, LocalDateTime dateAndTime, LocalDate studyStartDate,
+			LocalDate studyEndDate, int studyHours, int priority, ObligationType obligationType, Double maxPoints,
+			Double earnedPoints, boolean passed, boolean corrigible, Subject subject, List<StudySession> studySessions,
+			StudyCalendar studyCalendar) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.dateAndTime = dateAndTime;
 		this.studyStartDate = studyStartDate;
-		this.studyDateFinish = studyDateFinish;
+		this.studyEndDate = studyEndDate;
 		this.studyHours = studyHours;
 		this.priority = priority;
 		this.obligationType = obligationType;
@@ -89,8 +98,29 @@ public class Obligation implements Serializable{
 		this.corrigible = corrigible;
 		this.subject = subject;
 		this.studySessions = studySessions;
+		this.studyCalendar = studyCalendar;
 	}
-	
+
+
+
+
+
+	public StudyCalendar getStudyCalendar() {
+		return studyCalendar;
+	}
+
+
+
+
+
+	public void setStudyCalendar(StudyCalendar studyCalendar) {
+		this.studyCalendar = studyCalendar;
+	}
+
+
+
+
+
 	public LocalDate getStudyStartDate() {
 		return studyStartDate;
 	}
@@ -99,13 +129,6 @@ public class Obligation implements Serializable{
 		this.studyStartDate = studyStartDate;
 	}
 
-	public LocalDate getStudyDateFinish() {
-		return studyDateFinish;
-	}
-
-	public void setStudyDateFinish(LocalDate studyDateFinish) {
-		this.studyDateFinish = studyDateFinish;
-	}
 
 	public Integer getId() {
 		return id;
@@ -115,12 +138,20 @@ public class Obligation implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getDateAndTime() {
+	public LocalDateTime getDateAndTime() {
 		return dateAndTime;
 	}
 
-	public void setDateAndTime(LocalDate dateAndTime) {
+	public void setDateAndTime(LocalDateTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
+	}
+
+	public LocalDate getStudyEndDate() {
+		return studyEndDate;
+	}
+
+	public void setStudyEndDate(LocalDate studyEndDate) {
+		this.studyEndDate = studyEndDate;
 	}
 
 	public String getName() {
@@ -128,12 +159,6 @@ public class Obligation implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public LocalDate getDeadline() {
-		return dateAndTime;
-	}
-	public void setDeadline(LocalDate deadline) {
-		this.dateAndTime = deadline;
 	}
 	public int getStudyHours() {
 		return studyHours;
@@ -190,11 +215,19 @@ public class Obligation implements Serializable{
 		this.studySessions = studySessions;
 	}
 
+
+
+
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(corrigible, dateAndTime, earnedPoints, id, maxPoints, name, obligationType, passed,
-				priority, studyDateFinish, studyHours, studySessions, studyStartDate, subject);
+				priority, studyCalendar, studyEndDate, studyHours, studySessions, studyStartDate, subject);
 	}
+
+
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -209,18 +242,23 @@ public class Obligation implements Serializable{
 				&& Objects.equals(earnedPoints, other.earnedPoints) && Objects.equals(id, other.id)
 				&& Objects.equals(maxPoints, other.maxPoints) && Objects.equals(name, other.name)
 				&& obligationType == other.obligationType && passed == other.passed && priority == other.priority
-				&& Objects.equals(studyDateFinish, other.studyDateFinish) && studyHours == other.studyHours
+				&& Objects.equals(studyCalendar, other.studyCalendar)
+				&& Objects.equals(studyEndDate, other.studyEndDate) && studyHours == other.studyHours
 				&& Objects.equals(studySessions, other.studySessions)
 				&& Objects.equals(studyStartDate, other.studyStartDate) && Objects.equals(subject, other.subject);
 	}
 
+
+
+
+
 	@Override
 	public String toString() {
 		return "Obligation [id=" + id + ", name=" + name + ", dateAndTime=" + dateAndTime + ", studyStartDate="
-				+ studyStartDate + ", studyDateFinish=" + studyDateFinish + ", studyHours=" + studyHours + ", priority="
+				+ studyStartDate + ", studyEndDate=" + studyEndDate + ", studyHours=" + studyHours + ", priority="
 				+ priority + ", obligationType=" + obligationType + ", maxPoints=" + maxPoints + ", earnedPoints="
 				+ earnedPoints + ", passed=" + passed + ", corrigible=" + corrigible + ", subject=" + subject
-				+ ", studySessions=" + studySessions + "]";
+				+ ", studySessions=" + studySessions + ", studyCalendar=" + studyCalendar + "]";
 	}
 
 

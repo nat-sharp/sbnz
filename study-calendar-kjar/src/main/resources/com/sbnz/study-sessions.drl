@@ -1,0 +1,39 @@
+package com.sbnz;
+
+import com.sbnz.studycalendarapp.model.Subject;
+import com.sbnz.studycalendarapp.service.StudyCalendarService;
+
+global StudyCalendarService service;
+
+rule "Inject Obligations"
+    when
+        $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false)
+    then
+        //pozovi iz servisa metodu
+        $calendar = service.injectObligations($calendar);
+        $calendar.setObligationsInjected(true);
+        update($calendar);
+end 
+
+
+
+rule "Calculate Priorities"
+ 	when
+        $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == false, sessionsCreated == false)
+    then
+        $calendar = service.calculatePriorities($calendar);
+        $calendar.setPrioritiesCalculated(true);
+        update($calendar);
+end 
+
+
+
+rule "Create Sessions"
+
+ 	when
+        $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == true, sessionsCreated == false)
+    then
+        $calendar = service.createSessions($calendar);
+        $calendar.setSessionsCreated(true);
+        update($calendar);
+end 

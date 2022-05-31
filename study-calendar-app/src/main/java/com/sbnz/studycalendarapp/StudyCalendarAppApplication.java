@@ -17,7 +17,7 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @SpringBootApplication
-public class StudyCalendarAppApplication implements ApplicationRunner{
+public class StudyCalendarAppApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudyCalendarAppApplication.class, args);
@@ -35,14 +35,6 @@ public class StudyCalendarAppApplication implements ApplicationRunner{
 		return kContainer;
 	}
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		
-
-		
-		
-	}
-	
 	@Bean
 	public DataSourceInitializer dataSourceInitializer(@Qualifier("dataSource") final javax.sql.DataSource dataSource) {
 	    ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();

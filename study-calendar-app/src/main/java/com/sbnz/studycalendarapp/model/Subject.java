@@ -61,6 +61,22 @@ public class Subject implements Serializable{
 		this.grade = grade;
 	}
 	
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public List<Obligation> getObligations() {
+		return obligations;
+	}
+
+	public void setObligations(List<Obligation> obligations) {
+		this.obligations = obligations;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -94,12 +110,6 @@ public class Subject implements Serializable{
 	}
 
 	@Override
-	public String toString() {
-		return "Subject [id=" + id + ", name=" + name + ", passed=" + passed + ", grade=" + grade + ", student="
-				+ student + ", obligations=" + obligations + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		return Objects.hash(grade, id, name, obligations, passed, student);
 	}
@@ -117,7 +127,13 @@ public class Subject implements Serializable{
 				&& Objects.equals(obligations, other.obligations) && passed == other.passed
 				&& Objects.equals(student, other.student);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Subject [id=" + id + ", name=" + name + ", passed=" + passed + ", grade=" + grade + ", student="
+				+ student + ", obligations=" + obligations + "]";
+	}
+
 
 	
 }

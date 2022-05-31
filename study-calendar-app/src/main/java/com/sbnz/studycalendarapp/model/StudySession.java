@@ -34,23 +34,52 @@ public class StudySession implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Obligation obligation;
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private StudyCalendar studyCalendar;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private StudyCalendar studyCalendar;
 	
+	@Column(name="priority")
+	private int priority;
 	
 	public StudySession() {
 		super();
 	}
 
-	public StudySession(LocalDateTime dateAndTime, float durationInHours, boolean done, Obligation obligation) {
+	public StudySession(Integer id, LocalDateTime dateAndTime, float durationInHours, boolean isDone,
+			Obligation obligation, StudyCalendar studyCalendar, int priority) {
 		super();
+		this.id = id;
 		this.dateAndTime = dateAndTime;
 		this.durationInHours = durationInHours;
-		this.isDone = done;
+		this.isDone = isDone;
 		this.obligation = obligation;
+		this.studyCalendar = studyCalendar;
+		this.priority = priority;
 	}
 
 
+	public StudyCalendar getStudyCalendar() {
+		return studyCalendar;
+	}
+
+	public void setStudyCalendar(StudyCalendar studyCalendar) {
+		this.studyCalendar = studyCalendar;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
 
 	public LocalDateTime getDateAndTime() {
 		return dateAndTime;
@@ -87,14 +116,8 @@ public class StudySession implements Serializable{
 	}
 
 	@Override
-	public String toString() {
-		return "StudySession [dateAndTime=" + dateAndTime + ", durationInHours=" + durationInHours + ", done=" + isDone
-				+ ", obligation=" + obligation + "]";
-	}
-
-	@Override
 	public int hashCode() {
-		return Objects.hash(dateAndTime, isDone, durationInHours, obligation);
+		return Objects.hash(dateAndTime, durationInHours, id, isDone, obligation, priority, studyCalendar);
 	}
 
 	@Override
@@ -106,11 +129,20 @@ public class StudySession implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		StudySession other = (StudySession) obj;
-		return Objects.equals(dateAndTime, other.dateAndTime) && isDone == other.isDone
+		return Objects.equals(dateAndTime, other.dateAndTime)
 				&& Float.floatToIntBits(durationInHours) == Float.floatToIntBits(other.durationInHours)
-				&& Objects.equals(obligation, other.obligation);
+				&& Objects.equals(id, other.id) && isDone == other.isDone
+				&& Objects.equals(obligation, other.obligation) && priority == other.priority
+				&& Objects.equals(studyCalendar, other.studyCalendar);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "StudySession [id=" + id + ", dateAndTime=" + dateAndTime + ", durationInHours=" + durationInHours
+				+ ", isDone=" + isDone + ", obligation=" + obligation + ", studyCalendar=" + studyCalendar
+				+ ", priority=" + priority + "]";
+	}
+
 	
 	
 }
