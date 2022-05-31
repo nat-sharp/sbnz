@@ -1,0 +1,116 @@
+package com.sbnz;
+
+import com.sbnz.studycalendarapp.model.Obligation;
+import com.sbnz.studycalendarapp.model.Subject;
+
+rule "Not skipped and passed"
+	lock-on-active
+	when
+		$o: Obligation(!skipped, earnedPoints > maxPoints * 0.5)
+	then
+		modify($o) {setFinished(true), setPassed(true)}		
+end
+
+rule "Not skipped, but not passed"
+	lock-on-active
+	when
+		$o: Obligation(!skipped, earnedPoints <= maxPoints * 0.5)
+	then
+		modify($o) {setPassed(false), setEarnedPoints(0.0)}		
+end
+
+rule "Not skipped and not passed, but corrigible"
+	lock-on-active
+	when
+		$o: Obligation(!skipped, !passed, corrigible)
+	then
+		modify($o) {setFinished(false), setDateAndTime(null)}	
+end
+
+rule "Not skipped, not passed and not corrigible"
+	lock-on-active
+	when
+		$o: Obligation(!skipped, !passed, !corrigible)
+	then
+		modify($o) {setFinished(true)}	
+end
+
+rule "Skipped, but corrigible"
+	lock-on-active
+	when
+		$o: Obligation(skipped, corrigible)
+	then
+		modify($o) {setFinished(false), setEarnedPoints(0.0), setDateAndTime(null)}	
+end
+
+rule "Skipped and not corrigible"
+	lock-on-active
+	when
+		$o: Obligation(skipped, !corrigible)
+	then
+		modify($o) {setFinished(true), setPassed(false), setEarnedPoints(0.0)}	
+end
+
+rule "Earned points on finished obligations"
+    when
+    	$s: Subject($obligations: obligations)
+        Number($points: doubleValue) from accumulate(
+       		Obligation(finished, $earnedPoints: earnedPoints) from $obligations,
+       		sum($earnedPoints)
+    	)
+    then
+    	modify($s) {setEarnedPoints($points)}
+end
+
+rule "All subject's obligations are finished"
+    when
+    	$s: Subject($obligations: obligations)
+        $finished: Number($finished == $obligations.size()) from accumulate(
+       		$o: Obligation(finished) from $obligations,
+       		count($o)
+    	)
+    then
+    	modify($s) {setFinished(true)}
+end
+
+rule "Subject graded with 5"
+    when
+    	$s: Subject(finished, earnedPoints < 51)
+    then
+    	modify($s) {setPassed(false), setGrade(5)}
+end
+
+rule "Subject graded with 6"
+    when
+    	$s: Subject(finished, earnedPoints >= 51, earnedPoints < 61)
+    then
+    	modify($s) {setPassed(true), setGrade(6)}
+end
+
+rule "Subject graded with 7"
+    when
+    	$s: Subject(finished, earnedPoints >= 61, earnedPoints < 71)
+    then
+    	modify($s) {setPassed(true), setGrade(7)}
+end
+
+rule "Subject graded with 8"
+    when
+    	$s: Subject(finished, earnedPoints >= 71, earnedPoints < 81)
+    then
+    	modify($s) {setPassed(true), setGrade(8)}
+end
+
+rule "Subject graded with 9"
+    when
+    	$s: Subject(finished, earnedPoints >= 81, earnedPoints < 91)
+    then
+    	modify($s) {setPassed(true), setGrade(9)}
+end
+
+rule "Subject graded with 10"
+    when
+    	$s: Subject(finished, earnedPoints >= 91)
+    then
+    	modify($s) {setPassed(true), setGrade(10)}
+end
