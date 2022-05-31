@@ -40,9 +40,6 @@ public class Student implements Serializable{
 	@Column(name="password")
 	private String password;
 	
-	@Column(name="free_day_before_obligation")
-	private boolean freeDayBeforeObligation;//?
-	
 	@Column(name="concentrated_study_hours")
 	private boolean concetratedStudyHours;
 	
@@ -59,8 +56,8 @@ public class Student implements Serializable{
 	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Subject> subjects;
 	
-	@OneToOne(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private StudyCalendar studyCalendar;
+//	@OneToOne(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	private StudyCalendar studyCalendar;
 	
 	
 	public Student() {
@@ -68,20 +65,19 @@ public class Student implements Serializable{
 	}
 	
 	public Student(Integer id, String firstName, String lastName, String username, String password,
-			boolean freeDayBeforeObligation, boolean concetratedStudyHours, StudentCategory category,
-			StudentActivity activity, List<Subject> subjects, StudyCalendar studyCalendar) {
+			boolean concetratedStudyHours, StudentCategory category,
+			StudentActivity activity, List<Subject> subjects) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.password = password;
-		this.freeDayBeforeObligation = freeDayBeforeObligation;
 		this.concetratedStudyHours = concetratedStudyHours;
 		this.category = category;
 		this.activity = activity;
 		this.subjects = subjects;
-		this.studyCalendar = studyCalendar;
+//		this.studyCalendar = studyCalendar;
 	}
 
 	public Integer getId() {
@@ -115,12 +111,6 @@ public class Student implements Serializable{
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public boolean isFreeDayBeforeObligation() {
-		return freeDayBeforeObligation;
-	}
-	public void setFreeDayBeforeObligation(boolean freeDayBeforeObligation) {
-		this.freeDayBeforeObligation = freeDayBeforeObligation;
 	}
 	public boolean isConcetratedStudyHours() {
 		return concetratedStudyHours;
@@ -158,17 +148,17 @@ public class Student implements Serializable{
 	public void setSubjects(List<Subject> subjects) {
 		this.subjects = subjects;
 	}
-	public StudyCalendar getStudyCalendar() {
-		return studyCalendar;
-	}
-	public void setStudyCalendar(StudyCalendar studyCalendar) {
-		this.studyCalendar = studyCalendar;
-	}
+//	public StudyCalendar getStudyCalendar() {
+//		return studyCalendar;
+//	}
+//	public void setStudyCalendar(StudyCalendar studyCalendar) {
+//		this.studyCalendar = studyCalendar;
+//	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, category, concetratedStudyHours, firstName, freeDayBeforeObligation, id, lastName,
-				password, studyCalendar, subjects, username);
+		return Objects.hash(activity, category, concetratedStudyHours, firstName, id, lastName, password,
+				subjects, username);
 	}
 
 	@Override
@@ -182,19 +172,17 @@ public class Student implements Serializable{
 		Student other = (Student) obj;
 		return activity == other.activity && category == other.category
 				&& concetratedStudyHours == other.concetratedStudyHours && Objects.equals(firstName, other.firstName)
-				&& freeDayBeforeObligation == other.freeDayBeforeObligation && Objects.equals(id, other.id)
-				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
-				&& Objects.equals(studyCalendar, other.studyCalendar) && Objects.equals(subjects, other.subjects)
-				&& Objects.equals(username, other.username);
+				&& Objects.equals(id, other.id) && Objects.equals(lastName, other.lastName)
+				&& Objects.equals(password, other.password) 
+				&& Objects.equals(subjects, other.subjects) && Objects.equals(username, other.username);
 	}
 
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
-				+ ", password=" + password + ", freeDayBeforeObligation=" + freeDayBeforeObligation
-				+ ", concetratedStudyHours=" + concetratedStudyHours + ", category=" + category + ", activity="
-				+ activity + ", subjects=" + subjects + ", studyCalendar=" + studyCalendar + "]";
+				+ ", password=" + password + ", concetratedStudyHours=" + concetratedStudyHours + ", category="
+				+ category + ", activity=" + activity + ", subjects=" + subjects 
+				+ "]";
 	}
-
 
 }

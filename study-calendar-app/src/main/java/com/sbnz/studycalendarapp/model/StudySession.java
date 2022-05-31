@@ -34,8 +34,8 @@ public class StudySession implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Obligation obligation;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	private StudyCalendar studyCalendar;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	private StudyCalendar studyCalendar;
 	
 	
 	public StudySession() {
