@@ -31,7 +31,7 @@ public class StudyCalendar implements Serializable{
 	private Student student;
 	
 	@OneToMany(mappedBy="studyCalendar", fetch=FetchType.LAZY, cascade= CascadeType.ALL)
-	private Map<LocalDate, List<StudySession>> sessions;  //resenje je da sesija ima svoj datum, a kad obradjujem podatke- stvorim sebi mapu
+	private List<StudySession> sessions;  //resenje je da sesija ima svoj datum, a kad obradjujem podatke- stvorim sebi mapu
 	
 	@OneToMany(mappedBy="studyCalendar", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Obligation> obligations;
@@ -51,12 +51,12 @@ public class StudyCalendar implements Serializable{
 		this.obligationsInjected = false;
 		this.sessionsCreated = false;
 		this.prioritiesCalculated = false;
-		this.sessions = new HashMap<>();
+		this.sessions = new ArrayList<>();
 		this.obligations = new ArrayList<>();
 	}
 
 
-	public StudyCalendar(Integer id, Student student, Map<LocalDate, List<StudySession>> organizedSessions,
+	public StudyCalendar(Integer id, Student student, List<StudySession> organizedSessions,
 			List<Obligation> obligations, Boolean obligationsInjected, Boolean prioritiesCalculated,
 			Boolean sessionsCreated) {
 		super();
@@ -86,20 +86,15 @@ public class StudyCalendar implements Serializable{
 	}
 
 
-	public Map<LocalDate, List<StudySession>> getSessions() {
+
+	public List<StudySession> getSessions() {
 		return sessions;
 	}
 
 
-
-
-
-	public void setSessions(Map<LocalDate, List<StudySession>> sessions) {
+	public void setSessions(List<StudySession> sessions) {
 		this.sessions = sessions;
 	}
-
-
-
 
 
 	public Student getStudent() {
@@ -142,13 +137,10 @@ public class StudyCalendar implements Serializable{
 	}
 
 
-
-
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, obligations, obligationsInjected, sessions, prioritiesCalculated,
-				sessionsCreated, student);
+		return Objects.hash(id, obligations, obligationsInjected, prioritiesCalculated, sessions, sessionsCreated,
+				student);
 	}
 
 
@@ -163,23 +155,23 @@ public class StudyCalendar implements Serializable{
 		StudyCalendar other = (StudyCalendar) obj;
 		return Objects.equals(id, other.id) && Objects.equals(obligations, other.obligations)
 				&& Objects.equals(obligationsInjected, other.obligationsInjected)
-				&& Objects.equals(sessions, other.sessions)
 				&& Objects.equals(prioritiesCalculated, other.prioritiesCalculated)
-				&& Objects.equals(sessionsCreated, other.sessionsCreated) && Objects.equals(student, other.student);
+				&& Objects.equals(sessions, other.sessions) && Objects.equals(sessionsCreated, other.sessionsCreated)
+				&& Objects.equals(student, other.student);
 	}
-
-
-
 
 
 	@Override
 	public String toString() {
-		return "StudyCalendar [id=" + id + ", student=" + student + ", organizedSessions=" + sessions
-				+ ", obligations=" + obligations + ", obligationsInjected=" + obligationsInjected
-				+ ", prioritiesCalculated=" + prioritiesCalculated + ", sessionsCreated=" + sessionsCreated + "]";
+		return "StudyCalendar [id=" + id + ", student=" + student + ", sessions=" + sessions + ", obligations="
+				+ obligations + ", obligationsInjected=" + obligationsInjected + ", prioritiesCalculated="
+				+ prioritiesCalculated + ", sessionsCreated=" + sessionsCreated + "]";
 	}
 
 
-	
+
+
+
+
 
 }

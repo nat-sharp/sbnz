@@ -1,6 +1,8 @@
 package com.sbnz.studycalendarapp.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,6 +43,7 @@ public class StudyCalendarService {
 				boolean isKeyPresent = sessions.containsKey(date);
 				StudySession newSession = new StudySession();
 				newSession.setObligation(obligation);
+				newSession.setDateAndTime(date.atStartOfDay());
 				
 				if(isKeyPresent) {
 					List<StudySession> exList = sessions.get(date);
@@ -55,15 +58,41 @@ public class StudyCalendarService {
 		
 		System.out.print(sessions);
 		
-		cal.setSessions(sessions);
+		cal.setSessions(getListFromMap(sessions));
 		return cal;
 	}
 	
 	
+	private List<StudySession> getListFromMap(Map<LocalDate, List<StudySession>> sessions) {
+		List<StudySession> lista = new ArrayList<>();
+		
+		for(LocalDate date : sessions.keySet()) {
+			lista.addAll(sessions.get(date));
+		}
+		return lista;
+	}
+
+	private Map<LocalDate, List<StudySession>> getMapFromList(List<StudySession> lista) {
+		Map<LocalDate, List<StudySession>> mapa = new HashMap<>();
+		
+		for(StudySession s : lista) {
+			LocalDate date = s.getDateAndTime().toLocalDate();
+			boolean isKeyPresent = mapa.containsKey(date);
+			if(!isKeyPresent) {
+				mapa.put(date, Arrays.asList(s));
+			}else {
+				List<StudySession> sesije = mapa.get(date);
+				sesije.add(s);
+				mapa.put(date, sesije);
+			}
+		}
+		return mapa;
+	}
+
 	//CALCULATE PRIORITIES
 	public StudyCalendar calculatePriorities(StudyCalendar cal) {
 		
-		Map<LocalDate, List<StudySession>> dummy = cal.getSessions();
+		Map<LocalDate, List<StudySession>> dummy = getMapFromList(cal.getSessions());
 		
 		for(LocalDate date :dummy.keySet()) {
 			List<StudySession> sessions = dummy.get(date);
@@ -78,7 +107,7 @@ public class StudyCalendarService {
 			dummy.put(date, sessions);
 		}
 		
-		cal.setSessions(dummy);
+		cal.setSessions(getListFromMap(dummy));
 		return cal;
 	}
 	
@@ -98,7 +127,7 @@ public class StudyCalendarService {
 		
 		//podelimo broj sati na broj dana
 		List<Obligation> obs= new ArrayList<>(cal.getObligations());
-		Map<LocalDate, List<StudySession>> sess=   new HashMap<>(cal.getSessions());
+		Map<LocalDate, List<StudySession>> sess= getMapFromList(cal.getSessions());
 		
 		Collections.sort(obs, new SortByAvg());
 		
@@ -131,7 +160,7 @@ public class StudyCalendarService {
 			
 			
 		}
-		cal.setSessions(sess);
+		cal.setSessions(getListFromMap(sess));
 		return cal;
 	}
 	
