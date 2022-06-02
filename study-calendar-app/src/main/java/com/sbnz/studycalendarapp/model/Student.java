@@ -15,14 +15,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.sbnz.studycalendarapp.enums.Day;
-import com.sbnz.studycalendarapp.enums.PartOfDay;
 import com.sbnz.studycalendarapp.enums.StudentActivity;
 import com.sbnz.studycalendarapp.enums.StudentCategory;
 
 @Entity
 @Table(name="student")
 public class Student implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -51,7 +51,6 @@ public class Student implements Serializable{
 	
 	@Column(name="activity")
 	private StudentActivity activity;
-	
 	
 //	private List<Day> studyDays; TODO
 //	private List<PartOfDay> partsOfStudyDays; TODO
