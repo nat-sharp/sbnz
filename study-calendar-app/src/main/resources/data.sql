@@ -1,5 +1,5 @@
 -- Students
-insert into student (first_name, last_name, username, password, free_day_before_obligation, concentrated_study_hours, category, activity) values ('John', 'Doe', 'johndoe', 'john123', false, false, 0, 0);
+insert into student (first_name, last_name, username, password, free_day_before_obligation, concentrated_study_hours, category, activity_points, activity) values ('John', 'Doe', 'johndoe', 'john123', false, false, 0, 0, 0);
 
 -- Subjects
 insert into subject (name, passed, grade, finished, student_id) values ('Machine learning', false, 0, false, 1);

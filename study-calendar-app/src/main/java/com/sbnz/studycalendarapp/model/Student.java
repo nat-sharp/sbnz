@@ -49,6 +49,9 @@ public class Student implements Serializable{
 	@Column(name="category")
 	private StudentCategory category;
 	
+	@Column(name="activity_points")
+	private Double activityPoints;
+	
 	@Column(name="activity")
 	private StudentActivity activity;
 	
@@ -68,7 +71,7 @@ public class Student implements Serializable{
 	
 	public Student(Integer id, String firstName, String lastName, String username, String password,
 			boolean freeDayBeforeObligation, boolean concetratedStudyHours, StudentCategory category,
-			StudentActivity activity, List<Subject> subjects, StudyCalendar studyCalendar) {
+			Double activityPoints, StudentActivity activity, List<Subject> subjects, StudyCalendar studyCalendar) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -78,6 +81,7 @@ public class Student implements Serializable{
 		this.freeDayBeforeObligation = freeDayBeforeObligation;
 		this.concetratedStudyHours = concetratedStudyHours;
 		this.category = category;
+		this.activityPoints = activityPoints;
 		this.activity = activity;
 		this.subjects = subjects;
 		this.studyCalendar = studyCalendar;
@@ -94,48 +98,71 @@ public class Student implements Serializable{
 	public String getFirstName() {
 		return firstName;
 	}
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	
 	public String getLastName() {
 		return lastName;
 	}
+	
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
 	public String getUsername() {
 		return username;
 	}
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 	public boolean isFreeDayBeforeObligation() {
 		return freeDayBeforeObligation;
 	}
+	
 	public void setFreeDayBeforeObligation(boolean freeDayBeforeObligation) {
 		this.freeDayBeforeObligation = freeDayBeforeObligation;
 	}
+	
 	public boolean isConcetratedStudyHours() {
 		return concetratedStudyHours;
 	}
+	
 	public void setConcetratedStudyHours(boolean concetratedStudyHours) {
 		this.concetratedStudyHours = concetratedStudyHours;
 	}
+	
 	public StudentCategory getCategory() {
 		return category;
 	}
+
 	public void setCategory(StudentCategory category) {
 		this.category = category;
 	}
+	
+	public Double getActivityPoints() {
+		return activityPoints;
+	}
+
+	public void setActivityPoints(Double activityPoints) {
+		this.activityPoints = activityPoints;
+	}
+
 	public StudentActivity getActivity() {
 		return activity;
 	}
+	
 	public void setActivity(StudentActivity activity) {
 		this.activity = activity;
 	}
@@ -151,22 +178,26 @@ public class Student implements Serializable{
 //	public void setPartsOfStudyDays(List<PartOfDay> partsOfStudyDays) {
 //		this.partsOfStudyDays = partsOfStudyDays;
 //	}
+	
 	public List<Subject> getSubjects() {
 		return subjects;
 	}
+	
 	public void setSubjects(List<Subject> subjects) {
 		this.subjects = subjects;
 	}
+	
 	public StudyCalendar getStudyCalendar() {
 		return studyCalendar;
 	}
+	
 	public void setStudyCalendar(StudyCalendar studyCalendar) {
 		this.studyCalendar = studyCalendar;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, category, concetratedStudyHours, firstName, freeDayBeforeObligation, id, lastName,
+		return Objects.hash(activity, activityPoints, category, concetratedStudyHours, firstName, freeDayBeforeObligation, id, lastName,
 				password, studyCalendar, subjects, username);
 	}
 
@@ -179,7 +210,7 @@ public class Student implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Student other = (Student) obj;
-		return activity == other.activity && category == other.category
+		return activity == other.activity && category == other.category && activityPoints == other.activityPoints
 				&& concetratedStudyHours == other.concetratedStudyHours && Objects.equals(firstName, other.firstName)
 				&& freeDayBeforeObligation == other.freeDayBeforeObligation && Objects.equals(id, other.id)
 				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
@@ -194,6 +225,4 @@ public class Student implements Serializable{
 				+ ", concetratedStudyHours=" + concetratedStudyHours + ", category=" + category + ", activity="
 				+ activity + ", subjects=" + subjects + ", studyCalendar=" + studyCalendar + "]";
 	}
-
-
 }
