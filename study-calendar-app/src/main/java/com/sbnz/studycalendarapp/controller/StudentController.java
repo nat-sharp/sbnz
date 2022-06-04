@@ -10,29 +10,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbnz.studycalendarapp.dto.LoginDto;
-import com.sbnz.studycalendarapp.model.Admin;
-import com.sbnz.studycalendarapp.service.AdminService;
+import com.sbnz.studycalendarapp.model.Student;
+import com.sbnz.studycalendarapp.service.StudentService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+@RequestMapping("/api/student")
+public class StudentController {
 
 	@Autowired
-	private AdminService service;
+	private StudentService service;
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> loginAdmin(@RequestBody LoginDto dto) {
-		Admin admin = service.findByUsername(dto.getUsername());
+		Student student = service.findByUsername(dto.getUsername());
 		
-		if (admin == null) {
-			return new ResponseEntity<>("There is no admin with username '"+ dto.getUsername() + "'!", HttpStatus.BAD_REQUEST);
+		if (student == null) {
+			return new ResponseEntity<>("There is no student with username '"+ dto.getUsername() + "'!", HttpStatus.BAD_REQUEST);
 		}
 		
-		if (!admin.getPassword().equals(dto.getPassword())) {
+		if (!student.getPassword().equals(dto.getPassword())) {
 			return new ResponseEntity<>("You entered the wrong password!", HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>("Successfully logged in as admin!", HttpStatus.OK);
+		return new ResponseEntity<>("Successfully logged in as student!", HttpStatus.OK);
 	}
 }

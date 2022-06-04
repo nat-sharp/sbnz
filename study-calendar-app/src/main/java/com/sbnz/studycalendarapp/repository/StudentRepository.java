@@ -1,9 +1,9 @@
 package com.sbnz.studycalendarapp.repository;
 
-import com.sbnz.studycalendarapp.model.Student;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudentRepository extends JpaRepository<Student, Integer>{
+import com.sbnz.studycalendarapp.model.Student;
 
+public interface StudentRepository extends JpaRepository<Student, Integer>{
+	public Student findByUsername(String username);
 }
