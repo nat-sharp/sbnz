@@ -1,10 +1,9 @@
 package com.sbnz.studycalendarapp.repository;
 
-import com.sbnz.studycalendarapp.model.Admin;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AdminRepository extends JpaRepository<Admin, Integer>{
-	
+import com.sbnz.studycalendarapp.model.Admin;
 
+public interface AdminRepository extends JpaRepository<Admin, Integer>{
+	public Admin findByUsername(String username);
 }

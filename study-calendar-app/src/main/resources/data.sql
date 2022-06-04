@@ -1,3 +1,6 @@
+-- Admins
+insert into admin (first_name, last_name, username, password) values ('Jane', 'Doe', 'admin', 'admin');
+
 -- Students
 insert into student (first_name, last_name, username, password, concentrated_study_hours, category, activity_points, activity) values ('John', 'Doe', 'johndoe', 'john123', false, 0, 0, 0);
 
