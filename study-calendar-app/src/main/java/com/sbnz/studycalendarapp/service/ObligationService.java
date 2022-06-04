@@ -42,6 +42,7 @@ public class ObligationService {
 	
 	@Autowired
 	public ObligationService(KieContainer kieContainer) {
+		log.info("Initialising a new example session.");
 		this.kieContainer = kieContainer;
 	}
 	
@@ -58,7 +59,7 @@ public class ObligationService {
 		calendar.setObligations(saved);
 		calendar.setStudent(student);
 		
-//////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////
 		
 		KieSession kieSession = kieContainer.newKieSession();
 		
@@ -66,16 +67,33 @@ public class ObligationService {
 		kieSession.fireAllRules();
 		kieSession.dispose();
 		
-////////////////////////////////////////////////////////////////////////		
+		////////////////////////////////////////////////////////////////////////		
 		
-		for(List<StudySession> sessionList : calendar.getSessions().values()) {
-			for(StudySession session : sessionList) {
-				studySessionRepository.save(session);
-			}
+		for(StudySession session : calendar.getSessions()) {
+			studySessionRepository.save(session);
 		}
 		
 		studyCalendarRepository.save(calendar);
 		
 		return obligations;
+	}
+
+	public Obligation findOne(Integer id) {
+		return repository.findOneById(id);
+	}
+	
+	public Obligation save(Obligation obligation) {
+		return repository.save(obligation);
+	}
+	
+	public Obligation finishObligation(Obligation obligation) {
+		KieSession kieSession = kieContainer.newKieSession();
+		
+		kieSession.insert(obligation);
+		kieSession.insert(obligation.getSubject());
+		kieSession.fireAllRules();
+		kieSession.dispose();
+		
+		return save(obligation);
 	}
 }

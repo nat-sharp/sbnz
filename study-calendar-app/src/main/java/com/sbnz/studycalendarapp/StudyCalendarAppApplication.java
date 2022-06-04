@@ -1,14 +1,11 @@
 package com.sbnz.studycalendarapp;
 
-
-import javax.activation.DataSource;
+import javax.sql.DataSource;
 
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +31,9 @@ public class StudyCalendarAppApplication{
 		kScanner.start(10_000);
 		return kContainer;
 	}
-
+	
 	@Bean
-	public DataSourceInitializer dataSourceInitializer(@Qualifier("dataSource") final javax.sql.DataSource dataSource) {
+	public DataSourceInitializer dataSourceInitializer(@Qualifier("dataSource") final DataSource dataSource) {
 	    ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
 	    resourceDatabasePopulator.addScript(new ClassPathResource("/data.sql"));
 	    DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
@@ -44,5 +41,4 @@ public class StudyCalendarAppApplication{
 	    dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
 	    return dataSourceInitializer;
 	}
-
 }
