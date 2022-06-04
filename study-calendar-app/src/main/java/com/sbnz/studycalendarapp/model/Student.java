@@ -15,14 +15,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.sbnz.studycalendarapp.enums.Day;
-import com.sbnz.studycalendarapp.enums.PartOfDay;
 import com.sbnz.studycalendarapp.enums.StudentActivity;
 import com.sbnz.studycalendarapp.enums.StudentCategory;
 
 @Entity
 @Table(name="student")
 public class Student implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -46,9 +46,11 @@ public class Student implements Serializable{
 	@Column(name="category")
 	private StudentCategory category;
 	
+	@Column(name="activity_points")
+	private Double activityPoints;
+	
 	@Column(name="activity")
 	private StudentActivity activity;
-	
 	
 //	private List<Day> studyDays; TODO
 //	private List<PartOfDay> partsOfStudyDays; TODO
@@ -63,10 +65,10 @@ public class Student implements Serializable{
 	public Student() {
 		super();
 	}
-	
+
 	public Student(Integer id, String firstName, String lastName, String username, String password,
-			boolean concetratedStudyHours, StudentCategory category,
-			StudentActivity activity, List<Subject> subjects) {
+			boolean concetratedStudyHours, StudentCategory category, Double activityPoints, StudentActivity activity,
+			List<Subject> subjects) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -75,9 +77,9 @@ public class Student implements Serializable{
 		this.password = password;
 		this.concetratedStudyHours = concetratedStudyHours;
 		this.category = category;
+		this.activityPoints = activityPoints;
 		this.activity = activity;
 		this.subjects = subjects;
-//		this.studyCalendar = studyCalendar;
 	}
 
 	public Integer getId() {
@@ -91,74 +93,101 @@ public class Student implements Serializable{
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public boolean isConcetratedStudyHours() {
 		return concetratedStudyHours;
 	}
+
 	public void setConcetratedStudyHours(boolean concetratedStudyHours) {
 		this.concetratedStudyHours = concetratedStudyHours;
 	}
+
 	public StudentCategory getCategory() {
 		return category;
 	}
+
 	public void setCategory(StudentCategory category) {
 		this.category = category;
 	}
+
+	public Double getActivityPoints() {
+		return activityPoints;
+	}
+
+	public void setActivityPoints(Double activityPoints) {
+		this.activityPoints = activityPoints;
+	}
+
 	public StudentActivity getActivity() {
 		return activity;
 	}
+
 	public void setActivity(StudentActivity activity) {
 		this.activity = activity;
 	}
-//	public List<Day> getStudyDays() {
-//		return studyDays;
-//	}
-//	public void setStudyDays(List<Day> studyDays) {
-//		this.studyDays = studyDays;
-//	}
-//	public List<PartOfDay> getPartsOfStudyDays() {
-//		return partsOfStudyDays;
-//	}
-//	public void setPartsOfStudyDays(List<PartOfDay> partsOfStudyDays) {
-//		this.partsOfStudyDays = partsOfStudyDays;
-//	}
+
 	public List<Subject> getSubjects() {
 		return subjects;
 	}
+
 	public void setSubjects(List<Subject> subjects) {
 		this.subjects = subjects;
 	}
-//	public StudyCalendar getStudyCalendar() {
-//		return studyCalendar;
-//	}
-//	public void setStudyCalendar(StudyCalendar studyCalendar) {
-//		this.studyCalendar = studyCalendar;
-//	}
+	
+//	public List<Day> getStudyDays() {
+//	return studyDays;
+//}
+//public void setStudyDays(List<Day> studyDays) {
+//	this.studyDays = studyDays;
+//}
+//public List<PartOfDay> getPartsOfStudyDays() {
+//	return partsOfStudyDays;
+//}
+//public void setPartsOfStudyDays(List<PartOfDay> partsOfStudyDays) {
+//	this.partsOfStudyDays = partsOfStudyDays;
+//}
+
+//public StudyCalendar getStudyCalendar() {
+//	return studyCalendar;
+//}
+//public void setStudyCalendar(StudyCalendar studyCalendar) {
+//	this.studyCalendar = studyCalendar;
+//}
+
+	
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, category, concetratedStudyHours, firstName, id, lastName, password,
-				subjects, username);
+		return Objects.hash(activity, activityPoints, category, concetratedStudyHours, firstName, id, lastName,
+				password, subjects, username);
 	}
 
 	@Override
@@ -170,10 +199,10 @@ public class Student implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Student other = (Student) obj;
-		return activity == other.activity && category == other.category
-				&& concetratedStudyHours == other.concetratedStudyHours && Objects.equals(firstName, other.firstName)
-				&& Objects.equals(id, other.id) && Objects.equals(lastName, other.lastName)
-				&& Objects.equals(password, other.password) 
+		return activity == other.activity && Objects.equals(activityPoints, other.activityPoints)
+				&& category == other.category && concetratedStudyHours == other.concetratedStudyHours
+				&& Objects.equals(firstName, other.firstName) && Objects.equals(id, other.id)
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
 				&& Objects.equals(subjects, other.subjects) && Objects.equals(username, other.username);
 	}
 
@@ -181,7 +210,7 @@ public class Student implements Serializable{
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password + ", concetratedStudyHours=" + concetratedStudyHours + ", category="
-				+ category + ", activity=" + activity + ", subjects=" + subjects 
+				+ category + ", activityPoints=" + activityPoints + ", activity=" + activity + ", subjects=" + subjects
 				+ "]";
 	}
 

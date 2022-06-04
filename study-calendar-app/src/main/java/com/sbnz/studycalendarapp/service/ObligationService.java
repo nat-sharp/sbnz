@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbnz.studycalendarapp.model.Subject;
+
 @Service
 public class ObligationService {
 
@@ -90,7 +92,10 @@ public class ObligationService {
 		KieSession kieSession = kieContainer.newKieSession();
 		
 		kieSession.insert(obligation);
-		kieSession.insert(obligation.getSubject());
+		Subject subject = obligation.getSubject();
+		kieSession.insert(subject);
+		kieSession.insert(subject.getStudent());
+		kieSession.setGlobal("$finishedObligations", new ArrayList<Obligation>());
 		kieSession.fireAllRules();
 		kieSession.dispose();
 		
