@@ -22,7 +22,7 @@ public class AdminController {
 	private AdminService service;
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginAdmin(@RequestBody LoginDto dto) {
+	public ResponseEntity<String> login(@RequestBody LoginDto dto) {
 		Admin admin = service.findByUsername(dto.getUsername());
 		
 		if (admin == null) {

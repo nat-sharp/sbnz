@@ -19,4 +19,8 @@ public class StudentService {
 	public Student findByUsername(String username) {
 		return repository.findByUsername(username);
 	}
+	
+	public Student save(Student student) {
+		return repository.save(student);
+	}
 }

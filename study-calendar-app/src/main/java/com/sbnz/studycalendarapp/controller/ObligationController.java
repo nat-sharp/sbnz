@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sbnz.studycalendarapp.dto.CreateObligationDto;
+import com.sbnz.studycalendarapp.dto.ObligationDTO;
 import com.sbnz.studycalendarapp.model.Obligation;
 import com.sbnz.studycalendarapp.service.ObligationService;
 import com.sbnz.studycalendarapp.util.Mapper;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.sbnz.studycalendar.dto.ObligationDTO;
+
 import com.sbnz.studycalendarapp.model.Subject;
 import com.sbnz.studycalendarapp.service.SubjectService;
 @RestController

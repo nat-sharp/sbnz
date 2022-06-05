@@ -1,11 +1,14 @@
 package com.sbnz.studycalendarapp.util;
 
-import com.sbnz.studycalendarapp.dto.CreateObligationDto;
-import com.sbnz.studycalendarapp.model.Obligation;
-import com.sbnz.studycalendarapp.repository.SubjectRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sbnz.studycalendarapp.dto.CreateObligationDto;
+import com.sbnz.studycalendarapp.dto.StudentDto;
+import com.sbnz.studycalendarapp.enums.StudentActivity;
+import com.sbnz.studycalendarapp.model.Obligation;
+import com.sbnz.studycalendarapp.model.Student;
+import com.sbnz.studycalendarapp.repository.SubjectRepository;
 
 @Service
 public class Mapper {
@@ -25,6 +28,19 @@ public class Mapper {
 		o.setCorrigible(dto.getCorrigible());
 		o.setSubject(subjectRepository.getById(dto.getSubjectId()));
 		return o;
+	}
+	
+	public Student toStudent(StudentDto dto) {
+		Student s = new Student();
+		s.setFirstName(dto.getFirstName());
+		s.setLastName(dto.getLastName());
+		s.setUsername(dto.getUsername());
+		s.setPassword(dto.getPassword());
+		s.setConcetratedStudyHours(dto.isConcentratedStudyHours());
+		s.setCategory(dto.getCategory());
+		s.setActivity(StudentActivity.BEGGINER);
+		s.setActivityPoints(0.0);
+		return s;
 	}
 }
 

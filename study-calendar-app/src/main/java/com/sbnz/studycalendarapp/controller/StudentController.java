@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbnz.studycalendarapp.dto.LoginDto;
+import com.sbnz.studycalendarapp.dto.StudentDto;
 import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.service.StudentService;
+import com.sbnz.studycalendarapp.util.Mapper;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -21,8 +23,11 @@ public class StudentController {
 	@Autowired
 	private StudentService service;
 	
+	@Autowired
+	private Mapper mapper;
+	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginAdmin(@RequestBody LoginDto dto) {
+	public ResponseEntity<String> login(@RequestBody LoginDto dto) {
 		Student student = service.findByUsername(dto.getUsername());
 		
 		if (student == null) {
@@ -34,5 +39,13 @@ public class StudentController {
 		}
 		
 		return new ResponseEntity<>("Successfully logged in as student!", HttpStatus.OK);
+	}
+	
+	@PostMapping("/register")
+	public ResponseEntity<String> register(@RequestBody StudentDto dto) {
+		Student student = mapper.toStudent(dto);
+		service.save(student);
+		
+		return new ResponseEntity<>("Successfully registered!", HttpStatus.OK);
 	}
 }

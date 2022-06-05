@@ -1,4 +1,4 @@
-package com.sbnz.studycalendar.dto;
+package com.sbnz.studycalendarapp.dto;
 
 public class ObligationDTO {
 	private Integer id;

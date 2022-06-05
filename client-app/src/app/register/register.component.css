@@ -1,0 +1,47 @@
+.centered {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(89, 193, 115, 1) 0%, rgba(93, 38, 193, 1) 100%);
+}
+
+.mat-card {
+    text-align: center;
+}
+
+.mat-card-title {
+    padding-top: 30px;
+    font-size: 30px;
+}
+
+.mat-card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.mat-card-header {
+    text-align: center;
+    width: 100%;
+    display: block;
+    font-weight: 700;
+}
+
+.fullWidth {
+    width: 95%;
+    margin-left: 5px;
+}
+
+.fullWidth .back {
+    margin-top: 5px;
+}
+
+.container .mat-form-field+.mat-form-field {
+    margin-left: 9px;
+}
+
+.container .mat-radio-button {
+    margin-left: 10px;
+}

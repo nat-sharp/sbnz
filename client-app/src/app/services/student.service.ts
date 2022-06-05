@@ -14,4 +14,8 @@ export class StudentService {
   login(loginDto: any): Observable<string> {
     return this.http.post(this.URL + 'login', loginDto, { responseType: 'text' });
   }
+
+  register(studentDto: any): Observable<string> {
+    return this.http.post(this.URL + 'register', studentDto, { responseType: 'text' });
+  }
 }
