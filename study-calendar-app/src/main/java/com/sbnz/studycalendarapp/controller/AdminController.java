@@ -33,6 +33,6 @@ public class AdminController {
 			return new ResponseEntity<>("You entered the wrong password!", HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>("Successfully logged in as admin!", HttpStatus.OK);
+		return new ResponseEntity<>("Successfully logged in as an admin!", HttpStatus.OK);
 	}
 }

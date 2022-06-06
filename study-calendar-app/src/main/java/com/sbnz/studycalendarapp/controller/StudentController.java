@@ -38,7 +38,7 @@ public class StudentController {
 			return new ResponseEntity<>("You entered the wrong password!", HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>("Successfully logged in as student!", HttpStatus.OK);
+		return new ResponseEntity<>("Successfully logged in as a student!", HttpStatus.OK);
 	}
 	
 	@PostMapping("/register")

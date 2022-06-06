@@ -4,8 +4,10 @@ import { AdminHomepageComponent } from './admin-homepage/admin-homepage.componen
 import { FrontPageComponent } from './front-page/front-page.component';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { LoginStudentComponent } from './login-student/login-student.component';
+import { ObligationsComponent } from './obligations/obligations.component';
 import { RegisterComponent } from './register/register.component';
 import { StudentHomepageComponent } from './student-homepage/student-homepage.component';
+import { SubjectsComponent } from './subjects/subjects.component';
 
 const routes: Routes = [
   { path: '', component: FrontPageComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'admin', component: AdminHomepageComponent },
   { path: 'student', component: StudentHomepageComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'subjects', component: SubjectsComponent },
+  { path: 'obligations', component: ObligationsComponent },
 ];
 
 @NgModule({
