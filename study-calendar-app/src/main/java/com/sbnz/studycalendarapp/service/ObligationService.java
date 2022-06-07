@@ -90,6 +90,14 @@ public class ObligationService {
 	}
 	
 	public Obligation finishObligation(Obligation obligation) {
+		if (obligation.getEarnedPoints() > obligation.getMaxPoints() * 0.5 && !obligation.isSkipped()) {
+			obligation.setPassed(true);
+		} else {
+			obligation.setPassed(false);
+		}
+		
+		setObligationFields(obligation);
+		
 		KieSession kieSession = kieContainer.newKieSession("obligations");
 		
 		kieSession.insert(obligation);
@@ -104,6 +112,29 @@ public class ObligationService {
 		calculateStudentActivity(student);
 		
 		return save(obligation);
+	}
+	
+	private void setObligationFields(Obligation obligation) {
+		InputStream template = ObligationService.class.getResourceAsStream("/com/sbnz/templates/finish-obligation.drt");
+        
+        DataProvider dataProvider = new ArrayDataProvider(new String[][]{
+            new String[]{"false", "true", "true", "true", "$o.getEarnedPoints()", "$o.getDateAndTime()"}, //1
+            new String[]{"false", "true", "false", "true", "$o.getEarnedPoints()", "$o.getDateAndTime()"}, //1
+            new String[]{"false", "false", "true", "false", "0.0", "null"}, //2
+            new String[]{"false", "false", "false", "true", "0.0", "$o.getDateAndTime()"}, //3
+            new String[]{"true", "true", "true", "false", "0.0", "null"}, //4
+            new String[]{"true", "false", "true", "false", "0.0", "null"}, //4
+            new String[]{"true", "true", "false", "true", "0.0", "$o.getDateAndTime()"}, //5
+            new String[]{"true", "false", "false", "true", "0.0", "$o.getDateAndTime()"}, //5
+        });
+        
+        DataProviderCompiler converter = new DataProviderCompiler();
+        String drl = converter.compile(dataProvider, template);
+        
+        KieSession kieSession = createKieSessionFromDRL(drl);
+        kieSession.insert(obligation);
+        kieSession.fireAllRules();
+        kieSession.dispose();
 	}
 	
 	private void calculateStudentActivity(Student student) {

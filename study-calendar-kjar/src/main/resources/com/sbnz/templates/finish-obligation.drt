@@ -1,0 +1,24 @@
+template header
+skipped
+passed
+corrigible
+finished
+earnedPoints
+dateAndTime
+
+package com.sbnz.templates;
+
+import com.sbnz.studycalendarapp.model.Obligation;
+import com.sbnz.studycalendarapp.enums.StudentActivity;
+
+template "student-activity"
+
+rule "Finish obligation_@{row.rowNumber}"
+	lock-on-active
+	when
+	    $o: Obligation(skipped == @{skipped}, passed == @{passed}, corrigible == @{corrigible})
+	then
+	    modify($o) {setFinished(@{finished}), setEarnedPoints(@{earnedPoints}), setDateAndTime(@{dateAndTime})};
+end
+
+end template

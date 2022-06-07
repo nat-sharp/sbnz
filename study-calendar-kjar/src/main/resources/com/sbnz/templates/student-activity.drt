@@ -11,11 +11,10 @@ import com.sbnz.studycalendarapp.enums.StudentActivity;
 template "student-activity"
 
 rule "Student activity_@{row.rowNumber}"
-no-loop true
-when
-    $s: Student(activityPoints >= @{minPoints}, activityPoints < @{maxPoints})
-then
-    modify($s) {setActivity(StudentActivity.@{activity})};
+	when
+   		$s: Student(activityPoints >= @{minPoints}, activityPoints < @{maxPoints})
+	then
+	    modify($s) {setActivity(StudentActivity.@{activity})};
 end
 
 end template

@@ -7,55 +7,8 @@ import com.sbnz.studycalendarapp.enums.StudentActivity;
 import java.util.List;
 
 global List<Obligation> $finishedObligations;
-global List<Obligation> $skippedObligations;
 
-rule "Not skipped and passed"
-	lock-on-active
-	when
-		$o: Obligation(!skipped, earnedPoints > maxPoints * 0.5)
-	then
-		modify($o) {setFinished(true), setPassed(true)};
-end
 
-rule "Not skipped, but not passed"
-	lock-on-active
-	when
-		$o: Obligation(!skipped, earnedPoints <= maxPoints * 0.5)
-	then
-		modify($o) {setPassed(false), setEarnedPoints(0.0)};
-end
-
-rule "Not skipped and not passed, but corrigible"
-	lock-on-active
-	when
-		$o: Obligation(!skipped, !passed, corrigible)
-	then
-		modify($o) {setFinished(false), setDateAndTime(null)};
-end
-
-rule "Not skipped, not passed and not corrigible"
-	lock-on-active
-	when
-		$o: Obligation(!skipped, !passed, !corrigible)
-	then
-		modify($o) {setFinished(true)};
-end
-
-rule "Skipped, but corrigible"
-	lock-on-active
-	when
-		$o: Obligation(skipped, corrigible)
-	then
-		modify($o) {setFinished(false), setEarnedPoints(0.0), setDateAndTime(null)};
-end
-
-rule "Skipped and not corrigible"
-	lock-on-active
-	when
-		$o: Obligation(skipped, !corrigible)
-	then
-		modify($o) {setFinished(true), setPassed(false), setEarnedPoints(0.0)};
-end
 
 rule "Finished obligations and earned points"
     when
