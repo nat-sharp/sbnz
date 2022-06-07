@@ -40,6 +40,7 @@ public class ObligationController {
 		}
 		
 		obligations = service.registerObligations(obligations);
+		System.out.print(obligations);
 		
 		return new ResponseEntity<>(obligations, HttpStatus.OK);
 

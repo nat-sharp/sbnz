@@ -43,6 +43,7 @@ public class StudySession implements Serializable{
 	public StudySession() {
 		super();
 	}
+	
 
 	public StudySession(Integer id, LocalDateTime dateAndTime, float durationInHours, boolean isDone,
 			Obligation obligation, StudyCalendar studyCalendar, int priority) {

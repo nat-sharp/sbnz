@@ -7,6 +7,7 @@ import com.sbnz.studycalendarapp.model.Obligation;
 import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.model.StudyCalendar;
 import com.sbnz.studycalendarapp.model.StudySession;
+import com.sbnz.studycalendarapp.model.Subject;
 import com.sbnz.studycalendarapp.repository.ObligationRepository;
 import com.sbnz.studycalendarapp.repository.StudentRepository;
 import com.sbnz.studycalendarapp.repository.StudyCalendarRepository;
@@ -18,8 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.sbnz.studycalendarapp.model.Subject;
 
 @Service
 public class ObligationService {
@@ -36,6 +35,12 @@ public class ObligationService {
 	@Autowired
 	private StudyCalendarRepository studyCalendarRepository;
 	
+	@Autowired
+	private StudyCalendarService studyCalendarService;
+	
+	@Autowired
+	private StudySessionService studySessionService;
+	
 	private static Logger log = LoggerFactory.getLogger(ObligationService.class);
 
 	private final KieContainer kieContainer;
@@ -49,7 +54,7 @@ public class ObligationService {
 	}
 	
 	public List<Obligation> registerObligations(List<Obligation> obligations) {
-		
+		System.out.println("HEJ USLI SMO U REGISTER OBLIGATIONS");
 		List<Obligation> saved = new ArrayList<>();
 		for(Obligation o : obligations) {
 			saved.add(repository.save(o));
@@ -60,11 +65,15 @@ public class ObligationService {
 		StudyCalendar calendar = new StudyCalendar();
 		calendar.setObligations(saved);
 		calendar.setStudent(student);
-		
+		studyCalendarRepository.save(calendar);
+		System.out.println("SAD KREIRAMO KIE SESSION");
 		//////////////////////////////////////////////////////////////////////////
 		
 		KieSession kieSession = kieContainer.newKieSession();
+		kieSession.setGlobal("calendarService", this.studyCalendarService);
+		kieSession.setGlobal("studySessionService", this.studySessionService);
 		
+		System.out.println("SAD INSERTUJEMO KALENDAR");
 		kieSession.insert(calendar);
 		kieSession.fireAllRules();
 		kieSession.dispose();
@@ -72,6 +81,8 @@ public class ObligationService {
 		////////////////////////////////////////////////////////////////////////		
 		
 		for(StudySession session : calendar.getSessions()) {
+			System.out.print("____________SESIJA_____________");
+			System.out.print(session);
 			studySessionRepository.save(session);
 		}
 		

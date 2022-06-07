@@ -30,38 +30,41 @@ public class StudyCalendarService {
 	
 	private static Logger log = LoggerFactory.getLogger(StudyCalendarService.class);
 	
+	public List<LocalDate> getDatesInRange(LocalDate startDate, LocalDate endDate) {
+		return startDate.datesUntil(endDate).collect(Collectors.toList());
+	}
 	
 	//INJECT OBLIGATIONS
 	
-	public StudyCalendar injectObligations(StudyCalendar cal) {
-		Map<LocalDate, List<StudySession>> sessions = new HashMap<>();
-		
-		for(Obligation obligation : cal.getObligations()) {
-			List<LocalDate> listOfDates = obligation.getStudyStartDate().datesUntil(obligation.getStudyEndDate()).collect(Collectors.toList());
-			
-			for(LocalDate date : listOfDates) {
-				boolean isKeyPresent = sessions.containsKey(date);
-				StudySession newSession = new StudySession();
-				newSession.setObligation(obligation);
-				newSession.setDateAndTime(date.atStartOfDay());
-				
-				if(isKeyPresent) {
-					List<StudySession> exList = sessions.get(date);
-					exList.add(newSession);
-					sessions.put(date, exList);
-					
-				} else {
-					sessions.put(date, Arrays.asList(newSession));
-				}
-			}
-		}
-		
-		System.out.print(sessions);
-		
-		cal.setSessions(getListFromMap(sessions));
-		return cal;
-	}
-	
+//	public StudyCalendar injectObligations(StudyCalendar cal) {
+//		Map<LocalDate, List<StudySession>> sessions = new HashMap<>();
+//		
+//		for(Obligation obligation : cal.getObligations()) {
+//			List<LocalDate> listOfDates = obligation.getStudyStartDate().datesUntil(obligation.getStudyEndDate()).collect(Collectors.toList());
+//			
+//			for(LocalDate date : listOfDates) {
+//				boolean isKeyPresent = sessions.containsKey(date);
+//				StudySession newSession = new StudySession();
+//				newSession.setObligation(obligation);
+//				newSession.setDateAndTime(date.atStartOfDay());
+//				
+//				if(isKeyPresent) {
+//					List<StudySession> exList = sessions.get(date);
+//					exList.add(newSession);
+//					sessions.put(date, exList);
+//					
+//				} else {
+//					sessions.put(date, Arrays.asList(newSession));
+//				}
+//			}
+//		}
+//		
+//		System.out.print(sessions);
+//		
+//		cal.setSessions(getListFromMap(sessions));
+//		return cal;
+//	}
+//	
 	
 	private List<StudySession> getListFromMap(Map<LocalDate, List<StudySession>> sessions) {
 		List<StudySession> lista = new ArrayList<>();
