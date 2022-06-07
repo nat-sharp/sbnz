@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.sbnz.studycalendarapp.dto.CreateObligationDto;
 import com.sbnz.studycalendarapp.enums.ObligationType;
 
 @Entity
@@ -30,6 +29,11 @@ public class Obligation implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
 	@Column(name="name")
 	private String name;
 	
@@ -316,6 +320,7 @@ public class Obligation implements Serializable{
 				+ ", corrigible=" + corrigible + ", subject=" + subject + ", studySessions=" + studySessions
 				+ ", studyCalendar=" + studyCalendar + "]";
 	}
+
 	
 	
 

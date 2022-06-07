@@ -1,0 +1,45 @@
+<div class="centered">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Register</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="registerForm">
+            <mat-card-content>
+                <div class="container">
+                    <mat-form-field>
+                        <input matInput placeholder="First name" type="text" formControlName="firstName">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput placeholder="Last name" type="text" formControlName="lastName">
+                    </mat-form-field>
+                </div>
+                <mat-form-field class="fullWidth">
+                    <input matInput placeholder="Username" type="text" formControlName="username">
+                </mat-form-field>
+                <mat-form-field class="fullWidth">
+                    <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" formControlName="password">
+                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field>
+                <div class="container">
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="category">
+                            <mat-option value="NIGHT_BIRD">Night bird</mat-option>
+                            <mat-option value="EARLY_BIRD">Early bird</mat-option>
+                            <mat-option value="FLEXIBLE">Flexible</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="container">
+                    <mat-radio-group formControlName="concentratedStudyHours">
+                        <mat-label>Concentrated study hours:</mat-label>
+                        <mat-radio-button value="true" color="primary">Yes</mat-radio-button>
+                        <mat-radio-button value="false" color="primary">No</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </mat-card-content>
+            <button mat-raised-button color="accent" type="button" class="fullWidth" (click)="register()" [disabled]="!registerForm.valid">REGISTER</button>
+            <button mat-raised-button type="button" class="fullWidth back" (click)="back()">BACK</button>
+        </form>
+    </mat-card>
+</div>

@@ -1,10 +1,15 @@
 package com.sbnz;
 
 import com.sbnz.studycalendarapp.model.Subject;
+import com.sbnz.studycalendarapp.model.StudyCalendar;
+import com.sbnz.studycalendarapp.model.StudySession;
+import com.sbnz.studycalendarapp.model.Obligation;
 import com.sbnz.studycalendarapp.service.StudyCalendarService;
 import com.sbnz.studycalendarapp.service.StudySessionService;
-import java.util.List
-import java.util.ArrayList
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 global StudyCalendarService calendarService;
 global StudySessionService studySessionService;
@@ -12,28 +17,28 @@ global StudySessionService studySessionService;
 rule "Inject Obligations"
     when
         $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false, $obligations: obligations)
-        
+        System.out.println("__________________________________________________________EVO PRINT IZ DRULZA");
         $listaListiSesija : List(size > 0) from accumulate( Obligation($id: id ,$dateList: service.getDatesInRange(studyStartDate, studyEndDate)) from $obligations,
-
-			init(List<StudySession> listaListi = new ArrayList()),
+			
+			init(List<List<StudySession>> $listaListi = new ArrayList()),
 			///////////////////////////
 			action(
-				sesijeJedneObaveze: List( size > 0) from accumulate ($date from $dateList, 
-					init(List<StudySession> sesije = new ArrayList()),
+				$sesijeJedneObaveze: List( size > 0) from accumulate ($date from $dateList, 
+					init(List<StudySession> $sesije = new ArrayList()),
 					action(
 						StudySession sesh = studySessionService.newStudySession($calendar, $id, $date);
-						sesije.add(sesh);
+						$sesije.add(sesh);
 					),
-					result(sesije)
+					result($sesije)
 				)
 				
-				listListi.add(sesijeJedneObaveze);
+				$listListi.add($sesijeJedneObaveze);
 			),
 			///////////////////////////
-			result(listaListi)
+			result($listaListi)
         ) 
     then
-    	System.out.println("EVO PRINT IZ DRULZA")
-		$calendar.setSessions(listaListiSesija.stream().flatMap(Collection::stream).collect(Collectors.toList()));
+    	System.out.println("EVO PRINT IZ THEN DELA")
+		$calendar.setSessions($listaListiSesija.stream().flatMap(Collection::stream).collect(Collectors.toList()));
         update($calendar);
 end 

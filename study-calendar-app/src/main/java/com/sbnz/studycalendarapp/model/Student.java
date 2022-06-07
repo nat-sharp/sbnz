@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.sbnz.studycalendarapp.enums.StudentActivity;
@@ -206,12 +205,17 @@ public class Student implements Serializable{
 				&& Objects.equals(subjects, other.subjects) && Objects.equals(username, other.username);
 	}
 
+
 	@Override
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password + ", concetratedStudyHours=" + concetratedStudyHours + ", category="
 				+ category + ", activityPoints=" + activityPoints + ", activity=" + activity + ", subjects=" + subjects
 				+ "]";
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

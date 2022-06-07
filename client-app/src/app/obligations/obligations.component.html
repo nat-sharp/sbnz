@@ -1,0 +1,31 @@
+<div class="centered">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Obligations</mat-card-title>
+        </mat-card-header>
+        <br>
+        <mat-card-content>
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+                    <th mat-header-cell *matHeaderCellDef>{{column.header}}</th>
+                    <td mat-cell *matCellDef="let row">{{column.cell(row)}}</td>
+                </ng-container>
+                <ng-container matColumnDef="finish">
+                    <th mat-header-cell *matHeaderCellDef>Finish</th>
+                    <td mat-cell *matCellDef="let row">
+                        <button mat-icon-button color="primary" (click)="finish(row)">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns.concat(['finish'])"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns.concat(['finish']);"></tr>
+            </table>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="accent" (click)="add()">ADD</button>
+            <button mat-raised-button (click)="back()">BACK</button>
+        </mat-card-actions>
+        <br>
+    </mat-card>
+</div>

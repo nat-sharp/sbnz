@@ -137,6 +137,7 @@ public class StudySession implements Serializable{
 				&& Objects.equals(studyCalendar, other.studyCalendar);
 	}
 
+
 	@Override
 	public String toString() {
 		return "StudySession [id=" + id + ", dateAndTime=" + dateAndTime + ", durationInHours=" + durationInHours
@@ -144,6 +145,6 @@ public class StudySession implements Serializable{
 				+ ", priority=" + priority + "]";
 	}
 
-	
+
 	
 }
