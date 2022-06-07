@@ -141,24 +141,3 @@ rule "Student's points for skipped obligations"
     then
     	modify($s) {setActivityPoints($activityPoints - 10 * (5 - $priority))};
 end
-
-rule "Student activity - Begginer"
-    when
-	     $s: Student(activityPoints < 100)
-    then
-        modify($s) {setActivity(StudentActivity.BEGGINER)};
-end
-
-rule "Student activity - Hard working"
-    when
-	     $s: Student(activityPoints >= 100, activityPoints < 1000)
-    then
-        modify($s) {setActivity(StudentActivity.HARD_WORKING)};
-end
-
-rule "Student activity - Professional"
-    when
-	     $s: Student(activityPoints >= 1000)
-    then
-        modify($s) {setActivity(StudentActivity.PROFESSIONAL)};
-end

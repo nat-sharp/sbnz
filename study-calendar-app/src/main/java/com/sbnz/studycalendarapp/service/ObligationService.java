@@ -1,10 +1,18 @@
 package com.sbnz.studycalendarapp.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.drools.template.DataProvider;
+import org.drools.template.DataProviderCompiler;
+import org.drools.template.objects.ArrayDataProvider;
+import org.kie.api.builder.Message;
+import org.kie.api.builder.Results;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.utils.KieHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,13 +95,52 @@ public class ObligationService {
 		kieSession.insert(obligation);
 		Subject subject = obligation.getSubject();
 		kieSession.insert(subject);
-		kieSession.insert(subject.getStudent());
+		Student student = subject.getStudent();
+		kieSession.insert(student);
 		kieSession.setGlobal("$finishedObligations", new ArrayList<Obligation>());
 		kieSession.fireAllRules();
 		kieSession.dispose();
 		
+		calculateStudentActivity(student);
+		
 		return save(obligation);
 	}
+	
+	private void calculateStudentActivity(Student student) {
+		InputStream template = ObligationService.class.getResourceAsStream("/com/sbnz/templates/student-activity.drt");
+        
+        DataProvider dataProvider = new ArrayDataProvider(new String[][]{
+            new String[]{"-100000", "100", "BEGGINER"},
+            new String[]{"100", "1000", "HARD_WORKING"},
+            new String[]{"1000", "100000", "PROFESSIONAL"}
+        });
+        
+        DataProviderCompiler converter = new DataProviderCompiler();
+        String drl = converter.compile(dataProvider, template);
+        
+        KieSession kieSession = createKieSessionFromDRL(drl);
+        kieSession.insert(student);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+	}
+	
+	private KieSession createKieSessionFromDRL(String drl){
+        KieHelper kieHelper = new KieHelper();
+        kieHelper.addContent(drl, ResourceType.DRL);
+        
+        Results results = kieHelper.verify();
+        
+        if (results.hasMessages(Message.Level.WARNING, Message.Level.ERROR)){
+            List<Message> messages = results.getMessages(Message.Level.WARNING, Message.Level.ERROR);
+            for (Message message : messages) {
+                System.out.println("Error: "+message.getText());
+            }
+            
+            throw new IllegalStateException("Compilation errors were found. Check the logs.");
+        }
+        
+        return kieHelper.build().newKieSession();
+    }
 	
 	public List<Obligation> findAllBySubject(Subject subject) {
 		return repository.findAllBySubject(subject);
