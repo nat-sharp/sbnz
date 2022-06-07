@@ -37,7 +37,7 @@ public class ObligationService {
 	
 	@Autowired
 	public ObligationService(KieContainer kieContainer) {
-		log.info("Initialising a new example session.");
+		log.info("Initialising session for obligations.");
 		this.kieContainer = kieContainer;
 	}
 	
@@ -82,7 +82,7 @@ public class ObligationService {
 	}
 	
 	public Obligation finishObligation(Obligation obligation) {
-		KieSession kieSession = kieContainer.newKieSession();
+		KieSession kieSession = kieContainer.newKieSession("obligations");
 		
 		kieSession.insert(obligation);
 		Subject subject = obligation.getSubject();

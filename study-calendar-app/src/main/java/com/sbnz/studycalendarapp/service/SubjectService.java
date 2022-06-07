@@ -42,7 +42,7 @@ public class SubjectService {
 	}
 	
 	public Subject getGradedSubject(Subject subject) {
-		KieSession kieSession = kieContainer.newKieSession();
+		KieSession kieSession = kieContainer.newKieSession("studySessions");
 		
 		kieSession.insert(subject);
 		kieSession.fireAllRules();
