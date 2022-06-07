@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import com.sbnz.studycalendarapp.enums.ObligationType;
 
 public class CreateObligationDto {
-	
 	private Boolean corrigible;
 	private LocalDateTime dateAndTime;
 	private Double maxPoints;
@@ -16,8 +15,6 @@ public class CreateObligationDto {
 	private LocalDate studyEndDate;
 	private int studyHours;
 	private Integer subjectId;
-	
-	
 	
 	public CreateObligationDto() {
 		super();

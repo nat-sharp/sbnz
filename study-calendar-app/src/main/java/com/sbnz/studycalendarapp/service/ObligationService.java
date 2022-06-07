@@ -3,15 +3,6 @@ package com.sbnz.studycalendarapp.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sbnz.studycalendarapp.model.Obligation;
-import com.sbnz.studycalendarapp.model.Student;
-import com.sbnz.studycalendarapp.model.StudyCalendar;
-import com.sbnz.studycalendarapp.model.StudySession;
-import com.sbnz.studycalendarapp.repository.ObligationRepository;
-import com.sbnz.studycalendarapp.repository.StudentRepository;
-import com.sbnz.studycalendarapp.repository.StudyCalendarRepository;
-import com.sbnz.studycalendarapp.repository.StudySessionRepository;
-
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
@@ -19,16 +10,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbnz.studycalendarapp.model.Obligation;
+import com.sbnz.studycalendarapp.model.Student;
+import com.sbnz.studycalendarapp.model.StudyCalendar;
+import com.sbnz.studycalendarapp.model.StudySession;
 import com.sbnz.studycalendarapp.model.Subject;
+import com.sbnz.studycalendarapp.repository.ObligationRepository;
+import com.sbnz.studycalendarapp.repository.StudyCalendarRepository;
+import com.sbnz.studycalendarapp.repository.StudySessionRepository;
 
 @Service
 public class ObligationService {
 
 	@Autowired
 	private ObligationRepository repository;
-	
-	@Autowired
-	private StudentRepository studentRepository;
 	
 	@Autowired
 	private StudySessionRepository studySessionRepository;
@@ -39,8 +34,6 @@ public class ObligationService {
 	private static Logger log = LoggerFactory.getLogger(ObligationService.class);
 
 	private final KieContainer kieContainer;
-	
-	
 	
 	@Autowired
 	public ObligationService(KieContainer kieContainer) {
@@ -80,7 +73,7 @@ public class ObligationService {
 		return obligations;
 	}
 
-	public Obligation findOne(Integer id) {
+	public Obligation findOneById(Integer id) {
 		return repository.findOneById(id);
 	}
 	
@@ -100,5 +93,9 @@ public class ObligationService {
 		kieSession.dispose();
 		
 		return save(obligation);
+	}
+	
+	public List<Obligation> findAllBySubject(Subject subject) {
+		return repository.findAllBySubject(subject);
 	}
 }

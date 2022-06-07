@@ -29,8 +29,12 @@ public class SubjectService {
 		this.kieContainer = kieContainer;
 	}
 	
-	public Subject findOne(Integer id) {
+	public Subject findOneById(Integer id) {
 		return repository.findOneById(id);
+	}
+	
+	public Subject findOneByName(String name) {
+		return repository.findOneByName(name);
 	}
 	
 	public Subject save(Subject subject) {

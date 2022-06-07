@@ -1,11 +1,11 @@
 package com.sbnz.studycalendarapp.dto;
 
-public class ObligationDTO {
+public class FinishObligationDto {
 	private Integer id;
 	private boolean skipped;
 	private Double earnedPoints;
 	
-	public ObligationDTO(Integer id, boolean skipped, Double earnedPoints) {
+	public FinishObligationDto(Integer id, boolean skipped, Double earnedPoints) {
 		super();
 		this.id = id;
 		this.skipped = skipped;

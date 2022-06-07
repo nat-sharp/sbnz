@@ -13,16 +13,6 @@ export interface Subject {
   grade: number;
 }
 
-const SUBJECTS: Subject[] = [
-  {
-    name: "Machine learning",
-    earnedPoints: 0.0,
-    finished: false,
-    passed: false,
-    grade: 0
-  }
-];
-
 @Component({
   selector: 'app-subjects',
   templateUrl: './subjects.component.html',
@@ -43,17 +33,17 @@ export class SubjectsComponent implements OnInit {
     {
       columnDef: 'finished',
       header: 'Finished',
-      cell: (element: Subject) => `${element.finished}`,
+      cell: (element: Subject) => `${element.finished ? 'Yes' : 'No'}`,
     },
     {
       columnDef: 'passed',
       header: 'Passed',
-      cell: (element: Subject) => `${element.passed}`,
+      cell: (element: Subject) => `${element.passed ? 'Yes' : 'No'}`,
     },
     {
       columnDef: 'grade',
       header: 'Grade',
-      cell: (element: Subject) => `${element.grade}`,
+      cell: (element: Subject) => `${element.grade != 0 ? element.grade : '/'}`,
     }
   ];
   dataSource: Subject[] = [];
@@ -105,8 +95,8 @@ export class SubjectsComponent implements OnInit {
     });
   }
 
-  obligations() {
-    this.router.navigate(['/obligations']);
+  obligations(row: Subject) {
+    this.router.navigate(['/obligations', { subject: row.name }]);
   }
 
   back() {

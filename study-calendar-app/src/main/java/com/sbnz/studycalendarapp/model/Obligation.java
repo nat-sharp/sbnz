@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.sbnz.studycalendarapp.dto.CreateObligationDto;
 import com.sbnz.studycalendarapp.enums.ObligationType;
 
 @Entity

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sbnz.studycalendarapp.dto.CreateObligationDto;
+import com.sbnz.studycalendarapp.dto.ObligationDto;
 import com.sbnz.studycalendarapp.dto.StudentDto;
 import com.sbnz.studycalendarapp.dto.SubjectDto;
 import com.sbnz.studycalendarapp.enums.StudentActivity;
@@ -31,6 +32,14 @@ public class Mapper {
 		return s;
 	}
 	
+	public SubjectDto toSubjectDto(Subject s) {
+		return new SubjectDto(s.getName(), s.getEarnedPoints(), s.isPassed(), s.getGrade(), s.isFinished());
+	}
+
+	public ObligationDto toObligationDto(Obligation o) {
+		return new ObligationDto(o.getName(), o.getDateAndTime(), o.getPriority(), o.getObligationType(), o.getMaxPoints(), o.getEarnedPoints(), o.isSkipped(), o.isPassed(), o.isFinished(), o.isCorrigible());
+	}
+	
 	public Obligation toObligation(CreateObligationDto dto) {
 		Obligation o = new Obligation();
 		o.setName(dto.getName());
@@ -43,10 +52,6 @@ public class Mapper {
 		o.setCorrigible(dto.getCorrigible());
 		o.setSubject(subjectRepository.getById(dto.getSubjectId()));
 		return o;
-	}
-	
-	public SubjectDto toSubjectDto(Subject s) {
-		return new SubjectDto(s.getName(), s.getEarnedPoints(), s.isPassed(), s.getGrade(), s.isFinished());
 	}
 }
 

@@ -37,7 +37,6 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    console.log(this.registerForm.value)
     this.service.register(this.registerForm.value).subscribe(
       data => {
         this.openSnackBar(data, this.RESPONSE_OK);
