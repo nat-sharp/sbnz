@@ -6,6 +6,7 @@ import { SubjectService } from '../services/subject.service';
 import { AddSubjectDialogComponent } from './add-subject-dialog/add-subject-dialog.component';
 
 export interface Subject {
+  id: number;
   name: string;
   earnedPoints: number;
   finished: boolean;
@@ -97,7 +98,7 @@ export class SubjectsComponent implements OnInit {
   }
 
   obligations(row: Subject) {
-    this.router.navigate(['/obligations', { subject: row.name }]);
+    this.router.navigate(['/obligations', { subjectId: row.id }]);
   }
 
   back() {

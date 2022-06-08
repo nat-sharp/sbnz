@@ -37,11 +37,11 @@ public class ObligationController {
 	@Autowired
 	private Mapper mapper;
 	
-	@GetMapping("/subject/{name}")
-	public ResponseEntity<?> getObligationsForSubject(@PathVariable String name) {
-		Subject subject = subjectService.findOneByName(name);
+	@GetMapping("/subject/{id}")
+	public ResponseEntity<?> getObligationsForSubject(@PathVariable Integer id) {
+		Subject subject = subjectService.findOneById(id);
 		if (subject == null) {
-			return new ResponseEntity<String>("There is no subject with name '" + name + "'!", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("There is no subject with id '" + id + "'!", HttpStatus.BAD_REQUEST);
 		}
 		
 		List<Obligation> obligations = service.findAllBySubject(subject);
@@ -68,13 +68,15 @@ public class ObligationController {
 		}
 	}
 	
-	@PostMapping("/add") // TODO: izmeniti
-	public ResponseEntity<String> addObligation(@RequestBody Obligation obligation){
-		Subject subject = subjectService.findOneById(1);
-		obligation.setSubject(subject);
-		service.save(obligation);
+	@PostMapping("/add")
+	public ResponseEntity<String> addObligation(@RequestBody CreateObligationDto dto){
+		Obligation createdObligation = service.addObligation(mapper.toObligation(dto));
 		
-		return new ResponseEntity<String>("Successfully added obligation!", HttpStatus.OK);
+		if (createdObligation != null) {
+			return new ResponseEntity<>("Successfully added obligation!", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PostMapping()

@@ -29,6 +29,7 @@ import { SubjectsComponent } from './subjects/subjects.component';
 import { ObligationsComponent } from './obligations/obligations.component';
 import { AddSubjectDialogComponent } from './subjects/add-subject-dialog/add-subject-dialog.component';
 import { FinishObligationDialogComponent } from './obligations/finish-obligation-dialog/finish-obligation-dialog.component';
+import { AddObligationDialogComponent } from './obligations/add-obligation-dialog/add-obligation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { FinishObligationDialogComponent } from './obligations/finish-obligation
     SubjectsComponent,
     ObligationsComponent,
     AddSubjectDialogComponent,
-    FinishObligationDialogComponent
+    FinishObligationDialogComponent,
+    AddObligationDialogComponent
   ],
   imports: [
     BrowserModule,

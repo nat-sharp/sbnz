@@ -1,6 +1,7 @@
 package com.sbnz.studycalendarapp.dto;
 
 public class SubjectDto {
+	private Integer id;
 	private String name;
 	private Double earnedPoints;
 	private boolean passed;
@@ -11,13 +12,22 @@ public class SubjectDto {
 		
 	}
 
-	public SubjectDto(String name, Double earnedPoints, boolean passed, int grade, boolean finished) {
+	public SubjectDto(Integer id, String name, Double earnedPoints, boolean passed, int grade, boolean finished) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.earnedPoints = earnedPoints;
 		this.passed = passed;
 		this.grade = grade;
 		this.finished = finished;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {

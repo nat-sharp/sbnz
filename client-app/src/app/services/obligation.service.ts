@@ -11,8 +11,12 @@ export class ObligationService {
 
   constructor(private http: HttpClient) { }
 
-  getObligationsForSubject(name: string): Observable<any> {
-    return this.http.get(this.URL + 'subject/' + name);
+  getObligationsForSubject(subjectId: any): Observable<any> {
+    return this.http.get(this.URL + 'subject/' + subjectId);
+  }
+
+  addObligation(dto: any): Observable<string> {
+    return this.http.post(this.URL + 'add/', dto, { responseType: 'text' });
   }
 
   finishObligation(dto: any): Observable<string> {

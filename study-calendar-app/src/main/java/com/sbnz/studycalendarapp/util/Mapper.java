@@ -33,7 +33,7 @@ public class Mapper {
 	}
 	
 	public SubjectDto toSubjectDto(Subject s) {
-		return new SubjectDto(s.getName(), s.getEarnedPoints(), s.isPassed(), s.getGrade(), s.isFinished());
+		return new SubjectDto(s.getId(), s.getName(), s.getEarnedPoints(), s.isPassed(), s.getGrade(), s.isFinished());
 	}
 
 	public ObligationDto toObligationDto(Obligation o) {
@@ -47,8 +47,13 @@ public class Mapper {
 		o.setStudyStartDate(dto.getStudyStartDate());
 		o.setStudyEndDate(dto.getStudyEndDate());
 		o.setStudyHours(dto.getStudyHours());
-		o.setObligationType(dto.getType());
+		o.setObligationType(dto.getObligationType());
+		o.setPriority(dto.getPriority());
 		o.setMaxPoints(dto.getMaxPoints());
+		o.setEarnedPoints(0.0);
+		o.setSkipped(false);
+		o.setPassed(false);
+		o.setFinished(false);
 		o.setCorrigible(dto.getCorrigible());
 		o.setSubject(subjectRepository.getById(dto.getSubjectId()));
 		return o;

@@ -33,10 +33,6 @@ public class SubjectService {
 		return repository.findOneById(id);
 	}
 	
-	public Subject findOneByName(String name) {
-		return repository.findOneByName(name);
-	}
-	
 	public Subject save(Subject subject) {
 		return repository.save(subject);
 	}

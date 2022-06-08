@@ -8,9 +8,10 @@ import com.sbnz.studycalendarapp.enums.ObligationType;
 public class CreateObligationDto {
 	private Boolean corrigible;
 	private LocalDateTime dateAndTime;
+	private Integer priority;
 	private Double maxPoints;
 	private String name;
-	private ObligationType type;
+	private ObligationType obligationType;
 	private LocalDate studyStartDate;
 	private LocalDate studyEndDate;
 	private int studyHours;
@@ -20,14 +21,15 @@ public class CreateObligationDto {
 		super();
 	}
 
-	public CreateObligationDto(Boolean corrigible, LocalDateTime dateAndTime, Double maxPoints, String name,
-			ObligationType type, LocalDate studyStartDate, LocalDate studyEndDate, int studyHours, Integer subjectId) {
+	public CreateObligationDto(Boolean corrigible, LocalDateTime dateAndTime, Integer priority, Double maxPoints, String name,
+			ObligationType obligationType, LocalDate studyStartDate, LocalDate studyEndDate, int studyHours, Integer subjectId) {
 		super();
 		this.corrigible = corrigible;
 		this.dateAndTime = dateAndTime;
+		this.priority = priority;
 		this.maxPoints = maxPoints;
 		this.name = name;
-		this.type = type;
+		this.obligationType = obligationType;
 		this.studyStartDate = studyStartDate;
 		this.studyEndDate = studyEndDate;
 		this.studyHours = studyHours;
@@ -50,6 +52,14 @@ public class CreateObligationDto {
 		this.dateAndTime = dateAndTime;
 	}
 
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+
 	public Double getMaxPoints() {
 		return maxPoints;
 	}
@@ -66,12 +76,12 @@ public class CreateObligationDto {
 		this.name = name;
 	}
 
-	public ObligationType getType() {
-		return type;
+	public ObligationType getObligationType() {
+		return obligationType;
 	}
 
-	public void setType(ObligationType type) {
-		this.type = type;
+	public void setObligationType(ObligationType obligationType) {
+		this.obligationType = obligationType;
 	}
 
 	public LocalDate getStudyStartDate() {

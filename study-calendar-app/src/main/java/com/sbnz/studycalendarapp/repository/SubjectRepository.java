@@ -9,8 +9,6 @@ import com.sbnz.studycalendarapp.model.Subject;
 
 public interface SubjectRepository extends JpaRepository<Subject, Integer>{
 	public Subject findOneById(Integer id);
-	
-	public Subject findOneByName(String name);
 
 	public List<Subject> findAllByStudent(Student student);
 }

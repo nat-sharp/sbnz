@@ -15,10 +15,10 @@ export class LoginStudentComponent implements OnInit {
   RESPONSE_OK: number = 0;
   RESPONSE_ERROR: number = -1;
 
-  constructor(private router: Router, private formBulder: FormBuilder, private service: StudentService, private snackBar: MatSnackBar) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private service: StudentService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.loginForm = this.formBulder.group({
+    this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });

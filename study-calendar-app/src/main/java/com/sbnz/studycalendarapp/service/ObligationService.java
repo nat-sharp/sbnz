@@ -168,6 +168,10 @@ public class ObligationService {
         return kieHelper.build().newKieSession();
     }
 	
+	public Obligation addObligation(Obligation obligation) {
+		return save(obligation);
+	}
+	
 	public List<Obligation> registerObligations(List<Obligation> obligations) {
 		
 		List<Obligation> saved = new ArrayList<>();
