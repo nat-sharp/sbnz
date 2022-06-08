@@ -8,8 +8,6 @@ import java.util.List;
 
 global List<Obligation> $finishedObligations;
 
-
-
 rule "Finished obligations and earned points"
     when
     	$s: Subject($obligations: obligations)
@@ -33,48 +31,6 @@ rule "All subject's obligations are finished"
     	eval($finishedForSubject == $obligationsNum)
     then
     	modify($s) {setFinished(true)};
-end
-
-rule "Subject graded with 5"
-    when
-    	$s: Subject(finished, earnedPoints < 51)
-    then
-    	modify($s) {setPassed(false), setGrade(5)};
-end
-
-rule "Subject graded with 6"
-    when
-    	$s: Subject(finished, earnedPoints >= 51, earnedPoints < 61)
-    then
-    	modify($s) {setPassed(true), setGrade(6)};
-end
-
-rule "Subject graded with 7"
-    when
-    	$s: Subject(finished, earnedPoints >= 61, earnedPoints < 71)
-    then
-    	modify($s) {setPassed(true), setGrade(7)};
-end
-
-rule "Subject graded with 8"
-    when
-    	$s: Subject(finished, earnedPoints >= 71, earnedPoints < 81)
-    then
-    	modify($s) {setPassed(true), setGrade(8)};
-end
-
-rule "Subject graded with 9"
-    when
-    	$s: Subject(finished, earnedPoints >= 81, earnedPoints < 91)
-    then
-    	modify($s) {setPassed(true), setGrade(9)};
-end
-
-rule "Subject graded with 10"
-    when
-    	$s: Subject(finished, earnedPoints >= 91)
-    then
-    	modify($s) {setPassed(true), setGrade(10)};
 end
 
 rule "Student's points for finished and passed obligations"

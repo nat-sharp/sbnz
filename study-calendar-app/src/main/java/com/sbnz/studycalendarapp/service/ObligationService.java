@@ -49,40 +49,12 @@ public class ObligationService {
 		this.kieContainer = kieContainer;
 	}
 	
-	public List<Obligation> registerObligations(List<Obligation> obligations) {
-		
-		List<Obligation> saved = new ArrayList<>();
-		for(Obligation o : obligations) {
-			saved.add(repository.save(o));
-		}
-		
-		Student student = saved.get(0).getSubject().getStudent();
-		
-		StudyCalendar calendar = new StudyCalendar();
-		calendar.setObligations(saved);
-		calendar.setStudent(student);
-		
-		//////////////////////////////////////////////////////////////////////////
-		
-		KieSession kieSession = kieContainer.newKieSession();
-		
-		kieSession.insert(calendar);
-		kieSession.fireAllRules();
-		kieSession.dispose();
-		
-		////////////////////////////////////////////////////////////////////////		
-		
-		for(StudySession session : calendar.getSessions()) {
-			studySessionRepository.save(session);
-		}
-		
-		studyCalendarRepository.save(calendar);
-		
-		return obligations;
-	}
-
 	public Obligation findOneById(Integer id) {
 		return repository.findOneById(id);
+	}
+	
+	public List<Obligation> findAllBySubject(Subject subject) {
+		return repository.findAllBySubject(subject);
 	}
 	
 	public Obligation save(Obligation obligation) {
@@ -109,6 +81,8 @@ public class ObligationService {
 		kieSession.fireAllRules();
 		kieSession.dispose();
 		
+		gradeSubject(subject);
+		
 		calculateStudentActivity(student);
 		
 		return save(obligation);
@@ -118,14 +92,14 @@ public class ObligationService {
 		InputStream template = ObligationService.class.getResourceAsStream("/com/sbnz/templates/finish-obligation.drt");
         
         DataProvider dataProvider = new ArrayDataProvider(new String[][]{
-            new String[]{"false", "true", "true", "true", "$o.getEarnedPoints()", "$o.getDateAndTime()"}, //1
-            new String[]{"false", "true", "false", "true", "$o.getEarnedPoints()", "$o.getDateAndTime()"}, //1
-            new String[]{"false", "false", "true", "false", "0.0", "null"}, //2
-            new String[]{"false", "false", "false", "true", "0.0", "$o.getDateAndTime()"}, //3
-            new String[]{"true", "true", "true", "false", "0.0", "null"}, //4
-            new String[]{"true", "false", "true", "false", "0.0", "null"}, //4
-            new String[]{"true", "true", "false", "true", "0.0", "$o.getDateAndTime()"}, //5
-            new String[]{"true", "false", "false", "true", "0.0", "$o.getDateAndTime()"}, //5
+            new String[]{"false", "true", "true", "true", "$o.getEarnedPoints()", "$o.getDateAndTime()"},
+            new String[]{"false", "true", "false", "true", "$o.getEarnedPoints()", "$o.getDateAndTime()"},
+            new String[]{"false", "false", "true", "false", "0.0", "null"},
+            new String[]{"false", "false", "false", "true", "0.0", "$o.getDateAndTime()"},
+            new String[]{"true", "true", "true", "false", "0.0", "null"},
+            new String[]{"true", "false", "true", "false", "0.0", "null"},
+            new String[]{"true", "true", "false", "true", "0.0", "$o.getDateAndTime()"},
+            new String[]{"true", "false", "false", "true", "0.0", "$o.getDateAndTime()"},
         });
         
         DataProviderCompiler converter = new DataProviderCompiler();
@@ -133,6 +107,27 @@ public class ObligationService {
         
         KieSession kieSession = createKieSessionFromDRL(drl);
         kieSession.insert(obligation);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+	}
+	
+	private void gradeSubject(Subject subject) {
+		InputStream template = ObligationService.class.getResourceAsStream("/com/sbnz/templates/subject-grade.drt");
+        
+        DataProvider dataProvider = new ArrayDataProvider(new String[][]{
+            new String[]{"0", "51", "false", "5"},
+            new String[]{"51", "61", "true", "6"},
+            new String[]{"61", "71", "true", "7"},
+            new String[]{"71", "81", "true", "8"},
+            new String[]{"81", "91", "true", "9"},
+            new String[]{"91", "100", "true", "10"}
+        });
+        
+        DataProviderCompiler converter = new DataProviderCompiler();
+        String drl = converter.compile(dataProvider, template);
+        
+        KieSession kieSession = createKieSessionFromDRL(drl);
+        kieSession.insert(subject);
         kieSession.fireAllRules();
         kieSession.dispose();
 	}
@@ -173,7 +168,35 @@ public class ObligationService {
         return kieHelper.build().newKieSession();
     }
 	
-	public List<Obligation> findAllBySubject(Subject subject) {
-		return repository.findAllBySubject(subject);
+	public List<Obligation> registerObligations(List<Obligation> obligations) {
+		
+		List<Obligation> saved = new ArrayList<>();
+		for(Obligation o : obligations) {
+			saved.add(repository.save(o));
+		}
+		
+		Student student = saved.get(0).getSubject().getStudent();
+		
+		StudyCalendar calendar = new StudyCalendar();
+		calendar.setObligations(saved);
+		calendar.setStudent(student);
+		
+		//////////////////////////////////////////////////////////////////////////
+		
+		KieSession kieSession = kieContainer.newKieSession();
+		
+		kieSession.insert(calendar);
+		kieSession.fireAllRules();
+		kieSession.dispose();
+		
+		////////////////////////////////////////////////////////////////////////		
+		
+		for(StudySession session : calendar.getSessions()) {
+			studySessionRepository.save(session);
+		}
+		
+		studyCalendarRepository.save(calendar);
+		
+		return obligations;
 	}
 }

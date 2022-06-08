@@ -1,0 +1,20 @@
+template header
+minPoints
+maxPoints
+passed
+grade
+
+package com.sbnz.templates;
+
+import com.sbnz.studycalendarapp.model.Subject;
+
+template "student-activity"
+
+rule "Subject grade_@{row.rowNumber}"
+	when
+   		$s: Subject(finished, earnedPoints >= @{minPoints}, earnedPoints < @{maxPoints})
+	then
+	    modify($s) {setPassed(@{passed}), setGrade(@{grade})};
+end
+
+end template
