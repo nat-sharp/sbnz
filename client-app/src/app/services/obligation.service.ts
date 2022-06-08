@@ -14,4 +14,8 @@ export class ObligationService {
   getObligationsForSubject(name: string): Observable<any> {
     return this.http.get(this.URL + 'subject/' + name);
   }
+
+  finishObligation(dto: any): Observable<string> {
+    return this.http.post(this.URL + 'finish/', dto, { responseType: 'text' });
+  }
 }

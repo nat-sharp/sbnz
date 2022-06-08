@@ -13,7 +13,7 @@
                 <ng-container matColumnDef="finish">
                     <th mat-header-cell *matHeaderCellDef>Finish</th>
                     <td mat-cell *matCellDef="let row">
-                        <button mat-icon-button color="primary" (click)="finish(row)">
+                        <button mat-icon-button color="primary" (click)="finish(row)" [disabled]="row.finished">
                             <mat-icon>check</mat-icon>
                         </button>
                     </td>

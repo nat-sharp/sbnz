@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.sbnz.studycalendarapp.enums.ObligationType;
 
 public class ObligationDto {
+	private Integer id;
 	private String name;
 	private LocalDateTime dateAndTime;
 	private int priority;
@@ -20,10 +21,11 @@ public class ObligationDto {
 		
 	}
 	
-	public ObligationDto(String name, LocalDateTime dateAndTime, int priority, ObligationType obligationType,
+	public ObligationDto(Integer id, String name, LocalDateTime dateAndTime, int priority, ObligationType obligationType,
 			Double maxPoints, Double earnedPoints, boolean skipped, boolean passed, boolean finished,
 			boolean corrigible) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.dateAndTime = dateAndTime;
 		this.priority = priority;
@@ -34,6 +36,14 @@ public class ObligationDto {
 		this.passed = passed;
 		this.finished = finished;
 		this.corrigible = corrigible;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {

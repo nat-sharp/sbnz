@@ -53,15 +53,6 @@ public class ObligationController {
 		return new ResponseEntity<List<ObligationDto>>(dtos, HttpStatus.OK);
 	}
 	
-	@PostMapping("/add") // TODO: izmeniti
-	public ResponseEntity<String> addObligation(@RequestBody Obligation obligation){
-		Subject subject = subjectService.findOneById(1);
-		obligation.setSubject(subject);
-		service.save(obligation);
-		
-		return new ResponseEntity<String>("Successfully added obligation!", HttpStatus.OK);
-	}
-	
 	@PostMapping("/finish")
 	public ResponseEntity<String> finishObligation(@RequestBody FinishObligationDto dto) {
 		Obligation obligation = service.findOneById(dto.getId());
@@ -75,6 +66,15 @@ public class ObligationController {
 		} else {
 			return new ResponseEntity<>("Something went wrong!", HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@PostMapping("/add") // TODO: izmeniti
+	public ResponseEntity<String> addObligation(@RequestBody Obligation obligation){
+		Subject subject = subjectService.findOneById(1);
+		obligation.setSubject(subject);
+		service.save(obligation);
+		
+		return new ResponseEntity<String>("Successfully added obligation!", HttpStatus.OK);
 	}
 	
 	@PostMapping()

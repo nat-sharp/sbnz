@@ -1,0 +1,21 @@
+<div class="centered">
+    <h1 mat-dialog-title>Finish Obligation</h1>
+    <div mat-dialog-content>
+        <div class="container">
+            <mat-radio-group [(ngModel)]="data.skipped">
+                <mat-label>Skipped:</mat-label>
+                <mat-radio-button value="true" color="primary">Yes</mat-radio-button>
+                <mat-radio-button value="false" color="primary">No</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="container">
+            <mat-form-field>
+                <input matInput placeholder="Earned points" type="number" [(ngModel)]="data.earnedPoints" [disabled]="data.skipped">
+            </mat-form-field>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button color="accent" [mat-dialog-close]="data">FINISH</button>
+        <button mat-raised-button (click)="close()">CLOSE</button>
+    </div>
+</div>

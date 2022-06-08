@@ -3,8 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ObligationService } from '../services/obligation.service';
+import { FinishObligationDialogComponent } from './finish-obligation-dialog/finish-obligation-dialog.component';
 
 export interface Obligation {
+  id: number;
   name: string;
   dateAndTime: string;
   priority: number;
@@ -15,6 +17,12 @@ export interface Obligation {
   passed: boolean;
   finished: boolean;
   corrigible: boolean;
+}
+
+export interface ObligationDto {
+  id: number;
+  skipped: boolean;
+  earnedPoints: number;
 }
 
 const OBLIGATIONS: Obligation[] = [];
@@ -80,6 +88,8 @@ export class ObligationsComponent implements OnInit {
   dataSource: Obligation[] = [];
   displayedColumns = this.columns.map(c => c.columnDef);
   subject: any = '';
+  skipped: boolean = false;
+  earnedPoints: number = 0.0;
 
   constructor(private route: ActivatedRoute, private router: Router, private service: ObligationService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
@@ -112,8 +122,30 @@ export class ObligationsComponent implements OnInit {
     
   }
 
-  finish(row: any) {
-    
+  finish(row: Obligation) {
+    this.dialog.open(FinishObligationDialogComponent, {
+      data: { skipped: this.skipped, earnedPoints: this.earnedPoints },
+      autoFocus: false
+    }).afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.skipped = result.skipped;
+        this.earnedPoints = result.earnedPoints;
+        let dto: ObligationDto = {
+          id: row.id,
+          skipped: this.skipped,
+          earnedPoints: this.earnedPoints
+        }
+        
+        this.service.finishObligation(dto).subscribe(
+          data => {
+            this.loadData();
+            this.openSnackBar(data);
+          },
+        )
+      }
+      this.skipped = false;
+      this.earnedPoints = 0.0;
+    });
   }
 
   back() {

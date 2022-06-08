@@ -80,7 +80,8 @@ export class SubjectsComponent implements OnInit {
 
   add() {
     this.dialog.open(AddSubjectDialogComponent, {
-      data: { name: this.name }
+      data: { name: this.name },
+      autoFocus: false
     }).afterClosed().subscribe(result => {
       if (result != undefined) {
         this.name = result;

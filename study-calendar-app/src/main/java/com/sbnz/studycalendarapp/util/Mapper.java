@@ -37,7 +37,7 @@ public class Mapper {
 	}
 
 	public ObligationDto toObligationDto(Obligation o) {
-		return new ObligationDto(o.getName(), o.getDateAndTime(), o.getPriority(), o.getObligationType(), o.getMaxPoints(), o.getEarnedPoints(), o.isSkipped(), o.isPassed(), o.isFinished(), o.isCorrigible());
+		return new ObligationDto(o.getId(), o.getName(), o.getDateAndTime(), o.getPriority(), o.getObligationType(), o.getMaxPoints(), o.getEarnedPoints(), o.isSkipped(), o.isPassed(), o.isFinished(), o.isCorrigible());
 	}
 	
 	public Obligation toObligation(CreateObligationDto dto) {
