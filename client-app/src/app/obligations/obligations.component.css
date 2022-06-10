@@ -6,14 +6,6 @@
     background: linear-gradient(180deg, rgba(89, 193, 115, 1) 0%, rgba(93, 38, 193, 1) 100%);
 }
 
-.centered {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(180deg, rgba(89, 193, 115, 1) 0%, rgba(93, 38, 193, 1) 100%);
-}
-
 .mat-card {
     text-align: center;
     width: 50%;

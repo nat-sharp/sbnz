@@ -14,9 +14,10 @@ import com.sbnz.studycalendarapp.enums.StudentActivity;
 template "student-activity"
 
 rule "Finish obligation_@{row.rowNumber}"
+	salience (100 * $priority)
 	lock-on-active
 	when
-	    $o: Obligation(skipped == @{skipped}, passed == @{passed}, corrigible == @{corrigible})
+	    $o: Obligation(skipped == @{skipped}, passed == @{passed}, corrigible == @{corrigible}, $priority: priority)
 	then
 	    modify($o) {setFinished(@{finished}), setEarnedPoints(@{earnedPoints}), setDateAndTime(@{dateAndTime})};
 end
