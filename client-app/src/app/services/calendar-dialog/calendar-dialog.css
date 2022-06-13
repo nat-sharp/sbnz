@@ -1,0 +1,17 @@
+.centered {
+  text-align: center;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.container .mat-form-field+.mat-form-field {
+  margin-left: 9px;
+}

@@ -30,7 +30,7 @@ public class StudyCalendar implements Serializable{
 	@OneToOne(fetch=FetchType.LAZY)
 	private Student student;
 	
-	@OneToMany(mappedBy="studyCalendar", fetch=FetchType.LAZY, cascade= CascadeType.ALL)
+	@OneToMany(mappedBy="studyCalendar", fetch=FetchType.EAGER, cascade= CascadeType.ALL)
 	private List<StudySession> sessions;  //resenje je da sesija ima svoj datum, a kad obradjujem podatke- stvorim sebi mapu
 	
 	@OneToMany(mappedBy="studyCalendar", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -163,8 +163,8 @@ public class StudyCalendar implements Serializable{
 
 	@Override
 	public String toString() {
-		return "StudyCalendar [id=" + id + ", student=" + student + ", sessions=" + sessions + ", obligations="
-				+ obligations + ", obligationsInjected=" + obligationsInjected + ", prioritiesCalculated="
+		return "StudyCalendar [id=" + id + ", student=IZBACILA"+ ", sessions=IZBACILA" + ", obligations=IZBACILA"
+				+ ", obligationsInjected=" + obligationsInjected + ", prioritiesCalculated="
 				+ prioritiesCalculated + ", sessionsCreated=" + sessionsCreated + "]";
 	}
 

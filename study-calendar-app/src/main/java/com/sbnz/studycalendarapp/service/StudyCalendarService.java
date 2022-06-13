@@ -47,6 +47,10 @@ public class StudyCalendarService {
 		this.kieContainer = kieContainer;
 	}
 	
+	public StudyCalendar getByStudentId(Integer id) {
+		return this.studyCalendarRepository.findByStudentId(id);
+	}
+	
 	
 	public List<StudySession> makeSessions(List<Obligation> obligations) {
 		
@@ -69,11 +73,13 @@ public class StudyCalendarService {
 		
 		////////////////////////////////////////////////////////////////////////		
 		
-		for(StudySession session : calendar.getSessions()) {
-			sessionRepository.save(session);
-		}
-		
 		StudyCalendar sc = studyCalendarRepository.save(calendar);
+		
+		for(StudySession session : calendar.getSessions()) {
+			session.setStudyCalendar(calendar);
+			sessionRepository.save(session);
+			
+		}
 		
 		return sc.getSessions();
 	}

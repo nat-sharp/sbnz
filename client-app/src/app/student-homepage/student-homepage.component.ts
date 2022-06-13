@@ -13,7 +13,7 @@ export class StudentHomepageComponent implements OnInit {
   ngOnInit(): void { }
 
   calendar() {
-    // TODO
+    this.router.navigate(['/sessions']);
   }
 
   subjects() {

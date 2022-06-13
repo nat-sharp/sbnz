@@ -6,6 +6,7 @@ import java.util.List;
 import com.sbnz.studycalendarapp.dto.SessionDto;
 import com.sbnz.studycalendarapp.model.Obligation;
 import com.sbnz.studycalendarapp.model.Student;
+import com.sbnz.studycalendarapp.model.StudyCalendar;
 import com.sbnz.studycalendarapp.model.StudySession;
 import com.sbnz.studycalendarapp.model.Subject;
 import com.sbnz.studycalendarapp.service.StudentService;
@@ -15,7 +16,7 @@ import com.sbnz.studycalendarapp.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +60,26 @@ public class StudyCalendarController {
 			dtos.add(s.toDto());
 		}
 		return new ResponseEntity<List<SessionDto>>(dtos, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/{username}")
+	public ResponseEntity<List<SessionDto>> getSessionsForStudent(@PathVariable String username) {
+		Student student = studentService.findByUsername(username);
+		if(student == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		StudyCalendar c = service.getByStudentId(student.getId());
+		
+		if(c == null || c.getSessions() == null ) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+		List<SessionDto> dtos = new ArrayList<>();
+		for(StudySession s : c.getSessions()) {
+			dtos.add(s.toDto());
+		}
+		
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 }

@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyCalendarRepository extends JpaRepository<StudyCalendar, Integer>{
 
+	StudyCalendar findByStudentId(Integer id);
+
 }

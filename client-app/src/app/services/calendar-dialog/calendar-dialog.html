@@ -1,0 +1,66 @@
+<div class="centered">
+  <div mat-dialog-header>
+      <h1 mat-dialog-title>New Obligation</h1>
+  </div>
+  <form [formGroup]="form">
+      <div mat-dialog-content>
+          <div>
+              <mat-form-field class="fullWidth">
+                  <input matInput placeholder="Name" type="text" [(ngModel)]="data.name" formControlName="name">
+              </mat-form-field>
+          </div>
+          <div>
+              <mat-form-field class="fullWidth">
+                  <mat-label>Type</mat-label>
+                  <mat-select [(ngModel)]="data.obligationType" formControlName="obligationType">
+                      <mat-option value="PROJECT">Project</mat-option>
+                      <mat-option value="HOMEWORK">Homework</mat-option>
+                      <mat-option value="TEST">Test</mat-option>
+                      <mat-option value="EXAM">Exam</mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </div>
+          <div>
+              <mat-form-field class="fullWidth">
+                  <input matInput type="datetime-local" placeholder="Date & Time" [(ngModel)]="data.dateAndTime" formControlName="dateAndTime">
+              </mat-form-field>
+          </div>
+          <div class="container">
+              <mat-form-field>
+                  <input matInput type="date" placeholder="Study Start" [(ngModel)]="data.studyStartDate" formControlName="studyStartDate">
+              </mat-form-field>
+              <mat-form-field>
+                  <input matInput type="date" placeholder="Study End" [(ngModel)]="data.studyEndDate" formControlName="studyEndDate">
+              </mat-form-field>
+              <mat-form-field>
+                  <input matInput type="number" placeholder="Study Hours" [(ngModel)]="data.studyHours" formControlName="studyHours">
+              </mat-form-field>
+          </div>
+          <div class="container">
+              <mat-form-field>
+                  <mat-label>Priority</mat-label>
+                  <mat-select [(ngModel)]="data.priority" formControlName="priority">
+                      <mat-option value="1">1</mat-option>
+                      <mat-option value="2">2</mat-option>
+                      <mat-option value="3">3</mat-option>
+                      <mat-option value="4">4</mat-option>
+                      <mat-option value="5">5</mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                  <input matInput type="number" placeholder="Max Points" [(ngModel)]="data.maxPoints" formControlName="maxPoints">
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Corrigible</mat-label>
+                  <mat-select [(ngModel)]="data.corrigible" formControlName="corrigible">
+                      <mat-option value="true">Yes</mat-option>
+                      <mat-option value="false">No</mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </div>
+      </div>
+      <div mat-dialog-actions>
+          <button mat-raised-button (click)="close()">CLOSE</button>
+      </div>
+  </form>
+</div>
