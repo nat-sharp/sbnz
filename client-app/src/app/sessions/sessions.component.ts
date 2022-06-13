@@ -74,7 +74,7 @@ export class SessionsComponent implements OnInit {
         currentSessions = data;
       }, error => {
         
-        this.openSnackBar("No sessions found... creating new ones");
+        
         this.calendarService.createSessionsForStudent(this.username).subscribe(
           data => {
             currentSessions = data;

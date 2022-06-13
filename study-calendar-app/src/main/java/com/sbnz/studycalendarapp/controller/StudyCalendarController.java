@@ -1,6 +1,7 @@
 package com.sbnz.studycalendarapp.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.sbnz.studycalendarapp.dto.SessionDto;
@@ -55,6 +56,8 @@ public class StudyCalendarController {
 		}
 		
 		List<StudySession> sessions = service.makeSessions(obligations);
+		
+//		Collections.sort()
 		
 		List<SessionDto> dtos = new ArrayList<>();
 		for(StudySession s : sessions) {
