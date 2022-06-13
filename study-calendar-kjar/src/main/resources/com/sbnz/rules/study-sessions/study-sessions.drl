@@ -1,7 +1,10 @@
 package com.sbnz;
 
+import com.sbnz.studycalendarapp.model.Obligation;
 import com.sbnz.studycalendarapp.model.Subject;
+import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.service.StudyCalendarService;
+import com.sbnz.studycalendarapp.model.StudyCalendar;
 
 global StudyCalendarService service;
 
@@ -10,8 +13,10 @@ rule "Inject Obligations"
         $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false)
     then
         //pozovi iz servisa metodu
+        System.out.println("HEJ CAO EVO NAS U PRAVILU INJET____1________________________________________");
         $calendar = service.injectObligations($calendar);
         $calendar.setObligationsInjected(true);
+        System.out.println("HEJ CAO EVO NAS U PRAVILU INJET_____2_______________________________________");
         update($calendar);
 end 
 
@@ -21,8 +26,10 @@ rule "Calculate Priorities"
  	when
         $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == false, sessionsCreated == false)
     then
+    	System.out.println("HEJ CAO EVO NAS U PRAVILU CALC_________1___________________________________");
         $calendar = service.calculatePriorities($calendar);
         $calendar.setPrioritiesCalculated(true);
+        System.out.println("HEJ CAO EVO NAS U PRAVILU CALC_________2___________________________________");
         update($calendar);
 end 
 
@@ -33,7 +40,9 @@ rule "Create Sessions"
  	when
         $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == true, sessionsCreated == false)
     then
+    	System.out.println("HEJ CAO EVO NAS U PRAVILU CREATE_________1___________________________________");
         $calendar = service.createSessions($calendar);
         $calendar.setSessionsCreated(true);
+        System.out.println("HEJ CAO EVO NAS U PRAVILU CREATE_________2___________________________________");
         update($calendar);
 end 

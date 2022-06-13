@@ -6,7 +6,6 @@ import java.util.List;
 import com.sbnz.studycalendarapp.dto.SessionDto;
 import com.sbnz.studycalendarapp.model.Obligation;
 import com.sbnz.studycalendarapp.model.Student;
-import com.sbnz.studycalendarapp.model.StudyCalendar;
 import com.sbnz.studycalendarapp.model.StudySession;
 import com.sbnz.studycalendarapp.model.Subject;
 import com.sbnz.studycalendarapp.service.StudentService;
@@ -17,13 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/studycal")
 public class StudyCalendarController {
@@ -37,8 +37,8 @@ public class StudyCalendarController {
 	@Autowired
 	private SubjectService subjectService;
 	
-	@PostMapping()
-	public ResponseEntity<List<SessionDto>> createSessions(String username) {
+	@PostMapping(value="/{username}")
+	public ResponseEntity<List<SessionDto>> createSessions(@PathVariable String username) {
 
 		Student student = studentService.findByUsername(username);
 		if(student == null) {

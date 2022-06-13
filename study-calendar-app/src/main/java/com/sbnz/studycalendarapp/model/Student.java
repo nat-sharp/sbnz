@@ -209,7 +209,7 @@ public class Student implements Serializable{
 	public String toString() {
 		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password + ", concetratedStudyHours=" + concetratedStudyHours + ", category="
-				+ category + ", activityPoints=" + activityPoints + ", activity=" + activity + ", subjects=" + subjects
+				+ category + ", activityPoints=" + activityPoints + ", activity=" + activity + ", subjects= IZBACILA" 
 				+ "]";
 	}
 

@@ -137,7 +137,7 @@ public class Subject implements Serializable{
 	@Override
 	public String toString() {
 		return "Subject [id=" + id + ", name=" + name + ", earnedPoints=" + earnedPoints + ", passed=" + passed + ", grade=" + grade 
-				+ ", finished=" + finished + ", student=" + student + ", obligations=" + obligations + "]";
+				+ ", finished=" + finished + ", student=" + student + ", obligations=IZBACILA"  + "]";
 	}
 
 	@Override

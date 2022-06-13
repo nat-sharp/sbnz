@@ -18,6 +18,7 @@ import com.sbnz.studycalendarapp.repository.ObligationRepository;
 import com.sbnz.studycalendarapp.repository.StudyCalendarRepository;
 import com.sbnz.studycalendarapp.repository.StudySessionRepository;
 
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,46 +39,53 @@ public class StudyCalendarService {
 	
 	private static Logger log = LoggerFactory.getLogger(StudyCalendarService.class);
 	
+	private final KieContainer kieContainer;
 	
-//	public List<StudySession> makeSessions(List<Obligation> obligations) {
-//		
-//		List<Obligation> saved = new ArrayList<>();
-//		for(Obligation o : obligations) {
-//			saved.add(obligationRepository.save(o));
-//		}
-//		
-//		Student student = saved.get(0).getSubject().getStudent();
-//		
-//		StudyCalendar calendar = new StudyCalendar();
-//		calendar.setObligations(saved);
-//		calendar.setStudent(student);
-//		
-//		//////////////////////////////////////////////////////////////////////////
-//		
-//		KieSession kieSession = kieContainer.newKieSession();
-//		
-//		kieSession.insert(calendar);
-//		kieSession.fireAllRules();
-//		kieSession.dispose();
-//		
-//		////////////////////////////////////////////////////////////////////////		
-//		
-//		for(StudySession session : calendar.getSessions()) {
-//			sessionRepository.save(session);
-//		}
-//		
-//		StudyCalendar sc = studyCalendarRepository.save(calendar);
-//		
-//		return sc.getSessions();
-//	}
+	@Autowired
+	public StudyCalendarService(KieContainer kieContainer) {
+		log.info("Initialising session for obligations.");
+		this.kieContainer = kieContainer;
+	}
+	
+	
+	public List<StudySession> makeSessions(List<Obligation> obligations) {
+		
+		System.out.println("_____________________________EVO USLI SMO U MAKE SESSIONS SC SERVICE");
+		System.out.println(obligations);
+		Student student = obligations.get(0).getSubject().getStudent();
+		
+		StudyCalendar calendar = new StudyCalendar();
+		calendar.setObligations(obligations);
+		calendar.setStudent(student);
+		
+		//////////////////////////////////////////////////////////////////////////
+		
+		KieSession kieSession = kieContainer.newKieSession("studySessions");
+		
+		kieSession.insert(calendar);
+		kieSession.setGlobal("service", this);
+		kieSession.fireAllRules();
+		kieSession.dispose();
+		
+		////////////////////////////////////////////////////////////////////////		
+		
+		for(StudySession session : calendar.getSessions()) {
+			sessionRepository.save(session);
+		}
+		
+		StudyCalendar sc = studyCalendarRepository.save(calendar);
+		
+		return sc.getSessions();
+	}
 	
 	//INJECT OBLIGATIONS
 	
 	public StudyCalendar injectObligations(StudyCalendar cal) {
 		Map<LocalDate, List<StudySession>> sessions = new HashMap<>();
+		System.out.println("______________________________SAD SMO U INJECT OBLIGATIONS");
 		
 		for(Obligation obligation : cal.getObligations()) {
-			List<LocalDate> listOfDates = obligation.getStudyStartDate().datesUntil(obligation.getStudyEndDate()).collect(Collectors.toList());
+			List<LocalDate> listOfDates = obligation.getStudyStartDate().datesUntil(obligation.getStudyEndDate().plusDays(1)).collect(Collectors.toList());
 			
 			for(LocalDate date : listOfDates) {
 				boolean isKeyPresent = sessions.containsKey(date);
@@ -95,7 +103,7 @@ public class StudyCalendarService {
 				}
 			}
 		}
-		
+		System.out.println("_____________________________________SAD TREBA DA IZADJEMO IZ INJECT OBLIGATIONS");
 		System.out.print(sessions);
 		
 		cal.setSessions(getListFromMap(sessions));
@@ -131,7 +139,7 @@ public class StudyCalendarService {
 
 	//CALCULATE PRIORITIES
 	public StudyCalendar calculatePriorities(StudyCalendar cal) {
-		
+		System.out.println("____________________CALCULATE PRIORITIES FNKCIJA");
 		Map<LocalDate, List<StudySession>> dummy = getMapFromList(cal.getSessions());
 		
 		for(LocalDate date :dummy.keySet()) {
@@ -148,6 +156,7 @@ public class StudyCalendarService {
 		}
 		
 		cal.setSessions(getListFromMap(dummy));
+		System.out.println("___________________________SAD TREBA DA IZADJEMO IZ CALCULAT EPRIORITIS");
 		return cal;
 	}
 	
@@ -164,7 +173,7 @@ public class StudyCalendarService {
 	
 	//CREATE SESSIONS
 	public StudyCalendar createSessions(StudyCalendar cal) {
-		
+		System.out.println("_______________________DA LI SMO STVARNO DOSPLEI U CREATE SESSIONS FUNKCIJU HEJ JEJ");
 		//podelimo broj sati na broj dana
 		List<Obligation> obs= new ArrayList<>(cal.getObligations());
 		Map<LocalDate, List<StudySession>> sess= getMapFromList(cal.getSessions());
@@ -200,10 +209,24 @@ public class StudyCalendarService {
 			
 			
 		}
-		cal.setSessions(getListFromMap(sess));
+		List<StudySession> sessions = removeEmptySessions(getListFromMap(sess));
+		cal.setSessions(sessions);
+		
+		System.out.println("____________________________SAD TREBA DA IZADJEMO IZ CREATE SESSIONS");
 		return cal;
 	}
 	
+	private List<StudySession> removeEmptySessions(List<StudySession> lista) {
+		List<StudySession> result = new ArrayList<>();
+		for(StudySession s: lista) {
+			if(s.getDurationInHours() != 0.0) {
+				result.add(s);
+			}
+		}
+		return result;
+	}
+
+
 	private Map<LocalDate, List<StudySession>> clearEmptySessions(Map<LocalDate, List<StudySession>> sessions, Obligation o) {
 		//sve sesije koje su za tu obligaciju i prazne su, izbrisi
 		Map<LocalDate, List<StudySession>> sess=   new HashMap<>(sessions);
@@ -211,8 +234,9 @@ public class StudyCalendarService {
 		for(LocalDate date : sessions.keySet()) {
 			List<StudySession> lista = sessions.get(date);
 			for(StudySession s: lista) {
-				if(s.getObligation() == o && (s.getDurationInHours() == 0)) {
+				if(s.getObligation() == o && (s.getDurationInHours() == 0.0)) {
 					//U NASOJ DUMMY LISTI BRISEMO
+					System.out.println("_________________________EVO BRISEMO_______________________________________________________________");
 					sess.get(date).remove(s); //TODO ili sa indexOf
 				}
 			}
