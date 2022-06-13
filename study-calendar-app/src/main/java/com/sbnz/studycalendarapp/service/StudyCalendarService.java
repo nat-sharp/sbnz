@@ -1,8 +1,6 @@
 package com.sbnz.studycalendarapp.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,10 +11,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sbnz.studycalendarapp.model.Obligation;
+import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.model.StudyCalendar;
 import com.sbnz.studycalendarapp.model.StudySession;
+import com.sbnz.studycalendarapp.repository.ObligationRepository;
 import com.sbnz.studycalendarapp.repository.StudyCalendarRepository;
+import com.sbnz.studycalendarapp.repository.StudySessionRepository;
 
+import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,48 @@ import org.springframework.stereotype.Service;
 public class StudyCalendarService {
 	
 	@Autowired
-	private StudyCalendarRepository repository;
+	private StudyCalendarRepository studyCalendarRepository;
+	
+	@Autowired
+	private ObligationRepository obligationRepository;
+	
+	@Autowired
+	private StudySessionRepository sessionRepository;
 	
 	private static Logger log = LoggerFactory.getLogger(StudyCalendarService.class);
 	
+	
+//	public List<StudySession> makeSessions(List<Obligation> obligations) {
+//		
+//		List<Obligation> saved = new ArrayList<>();
+//		for(Obligation o : obligations) {
+//			saved.add(obligationRepository.save(o));
+//		}
+//		
+//		Student student = saved.get(0).getSubject().getStudent();
+//		
+//		StudyCalendar calendar = new StudyCalendar();
+//		calendar.setObligations(saved);
+//		calendar.setStudent(student);
+//		
+//		//////////////////////////////////////////////////////////////////////////
+//		
+//		KieSession kieSession = kieContainer.newKieSession();
+//		
+//		kieSession.insert(calendar);
+//		kieSession.fireAllRules();
+//		kieSession.dispose();
+//		
+//		////////////////////////////////////////////////////////////////////////		
+//		
+//		for(StudySession session : calendar.getSessions()) {
+//			sessionRepository.save(session);
+//		}
+//		
+//		StudyCalendar sc = studyCalendarRepository.save(calendar);
+//		
+//		return sc.getSessions();
+//	}
 	
 	//INJECT OBLIGATIONS
 	
@@ -188,4 +228,5 @@ public class StudyCalendarService {
 	        		- b.getStudyHours()/ (b.getStudyStartDate().datesUntil(b.getStudyEndDate())).count());
 	    }
 	}
+
 }

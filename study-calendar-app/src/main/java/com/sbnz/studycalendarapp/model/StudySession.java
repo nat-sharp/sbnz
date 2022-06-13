@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.sbnz.studycalendarapp.dto.SessionDto;
+
 
 @Entity
 @Table(name="study_session")
@@ -141,6 +143,17 @@ public class StudySession implements Serializable{
 		return "StudySession [id=" + id + ", dateAndTime=" + dateAndTime + ", durationInHours=" + durationInHours
 				+ ", isDone=" + isDone + ", obligation=" + obligation + ", studyCalendar=" + studyCalendar
 				+ ", priority=" + priority + "]";
+	}
+
+	public SessionDto toDto() {
+		SessionDto dto = new SessionDto();
+		dto.setId(id);
+		dto.setDateAndTime(dateAndTime);
+		dto.setDurationInHours(durationInHours);
+		dto.setPriority(priority);
+		dto.setObligationname(obligation.getName());
+		
+		return dto;
 	}
 
 	

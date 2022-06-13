@@ -79,16 +79,4 @@ public class ObligationController {
 		}
 	}
 	
-	@PostMapping()
-	public ResponseEntity<List<Obligation>> createObligations(@RequestBody List<CreateObligationDto> dtos) {
-		// konvertovati dto u Obligation
-		List<Obligation> obligations = new ArrayList<>();
-		for(CreateObligationDto dto : dtos) {
-			obligations.add(mapper.toObligation(dto));
-		}
-		
-		obligations = service.registerObligations(obligations);
-		
-		return new ResponseEntity<>(obligations, HttpStatus.OK);
-	}
 }

@@ -171,36 +171,5 @@ public class ObligationService {
 	public Obligation addObligation(Obligation obligation) {
 		return save(obligation);
 	}
-	
-	public List<Obligation> registerObligations(List<Obligation> obligations) {
-		
-		List<Obligation> saved = new ArrayList<>();
-		for(Obligation o : obligations) {
-			saved.add(repository.save(o));
-		}
-		
-		Student student = saved.get(0).getSubject().getStudent();
-		
-		StudyCalendar calendar = new StudyCalendar();
-		calendar.setObligations(saved);
-		calendar.setStudent(student);
-		
-		//////////////////////////////////////////////////////////////////////////
-		
-		KieSession kieSession = kieContainer.newKieSession();
-		
-		kieSession.insert(calendar);
-		kieSession.fireAllRules();
-		kieSession.dispose();
-		
-		////////////////////////////////////////////////////////////////////////		
-		
-		for(StudySession session : calendar.getSessions()) {
-			studySessionRepository.save(session);
-		}
-		
-		studyCalendarRepository.save(calendar);
-		
-		return obligations;
-	}
+
 }
