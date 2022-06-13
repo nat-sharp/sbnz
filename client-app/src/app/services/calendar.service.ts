@@ -12,10 +12,12 @@ export class CalendarService {
   constructor(private http: HttpClient) { }
 
   createSessionsForStudent(username: string): Observable<any> {
+    console.log("POZVAN CREATING")
     return this.http.post(this.URL + username, null);
   }
 
   getSessionsForStudent(username: string): Observable<any> {
-    return this.http.get(this.URL + "username");
+    console.log("POZVAN GET")
+    return this.http.get(this.URL + username);
   }
 }

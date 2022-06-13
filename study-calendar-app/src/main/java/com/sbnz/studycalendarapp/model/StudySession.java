@@ -141,7 +141,7 @@ public class StudySession implements Serializable{
 	@Override
 	public String toString() {
 		return "StudySession [id=" + id + ", dateAndTime=" + dateAndTime + ", durationInHours=" + durationInHours
-				+ ", isDone=" + isDone + ", obligation=" + obligation + ", studyCalendar=" + studyCalendar
+				+ ", isDone=" + isDone + ", obligation=IZBACILA" + ", studyCalendar=IZBACILA"
 				+ ", priority=" + priority + "]";
 	}
 

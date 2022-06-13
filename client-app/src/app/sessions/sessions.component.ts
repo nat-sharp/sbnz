@@ -8,7 +8,7 @@ export interface Session {
   id: number,
   dateAndTime: string,
   durationInHours: number,
-  obligationName: string,
+  obligationname: string,
   priority: number  //TODO MOZDA BOJA KAO PRIORITET
 }
 
@@ -30,27 +30,27 @@ export class SessionsComponent implements OnInit {
         element.dateAndTime.split('T')[0].split('-')[1] + '.' +
         element.dateAndTime.split('T')[0].split('-')[0] + '. ' 
         }`,
-    },,
+    },
     {
-      columnDef: 'obligationName',
+      columnDef: 'obligationname',
       header: 'Obligation',
-      cell: (element: Session) => `${element.obligationName}`,
+      cell: (element: Session) => `${element.obligationname}`,
     },
     {
       columnDef: 'studyHours',
       header: "Duration in hours",
-      cell: (element: Session) => `${element.durationInHours} + "h"`,
+      cell: (element: Session) => `${element.durationInHours}h`,
     },
     {
       columnDef: 'priotity',
       header: "Priority",
-      cell: (element: Session) => `${element.priority}`
+      cell: (element: Session) => `${element.priority}`,
     }
   ]
 
   dataSource: Session[] = [];
-  displayedColumns = this.columns.map(c => c?.columnDef);
-  username: any = "";
+  displayedColumns = this.columns.map(c => c.columnDef);
+  username: any = '';
 
   constructor(private router: Router, 
     private calendarService:  CalendarService,
@@ -67,11 +67,37 @@ export class SessionsComponent implements OnInit {
 
 
   loadData() {
-    this.calendarService.createSessionsForStudent(this.username).subscribe(
+    let currentSessions : any[]= [];
+    console.log()
+    this.calendarService.getSessionsForStudent(this.username).subscribe(
       data => {
-        this.dataSource = data;
+        currentSessions = data;
+      }, error => {
+        
+        this.openSnackBar("No sessions found... creating new ones");
+        this.calendarService.createSessionsForStudent(this.username).subscribe(
+          data => {
+            currentSessions = data;
+            this.dataSource = data;
+            return
+          }, error => {
+            console.log(error.error);
+            this.openSnackBar("Error while creating sessions")
+          }
+        )
+        
       }
     )
+    
+      
+    
+
+    this.dataSource = currentSessions;
+  }
+
+
+  back() {
+    this.router.navigate(['/student']);
   }
 
   openSnackBar(msg: string) {
