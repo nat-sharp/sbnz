@@ -67,32 +67,41 @@ export class SessionsComponent implements OnInit {
 
 
   loadData() {
-    let currentSessions : any[]= [];
-    console.log()
-    this.calendarService.getSessionsForStudent(this.username).subscribe(
+    this.calendarService.createSessionsForStudent(this.username).subscribe(
       data => {
-        currentSessions = data;
+        this.dataSource = data;
+        return
       }, error => {
-        
-        
-        this.calendarService.createSessionsForStudent(this.username).subscribe(
-          data => {
-            currentSessions = data;
-            this.dataSource = data;
-            return
-          }, error => {
-            console.log(error.error);
-            this.openSnackBar("Error while creating sessions")
-          }
-        )
-        
+        console.log(error.error);
+        this.openSnackBar("Error while creating sessions")
       }
     )
+    // let currentSessions : any[]= [];
+    // console.log()
+    // this.calendarService.getSessionsForStudent(this.username).subscribe(
+    //   data => {
+    //     currentSessions = data;
+    //   }, error => {
+        
+        
+    //     this.calendarService.createSessionsForStudent(this.username).subscribe(
+    //       data => {
+    //         currentSessions = data;
+    //         this.dataSource = data;
+    //         return
+    //       }, error => {
+    //         console.log(error.error);
+    //         this.openSnackBar("Error while creating sessions")
+    //       }
+    //     )
+        
+    //   }
+    // )
     
       
     
 
-    this.dataSource = currentSessions;
+    // this.dataSource = currentSessions;
   }
 
 

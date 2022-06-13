@@ -2,6 +2,7 @@ package com.sbnz.studycalendarapp.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.sbnz.studycalendarapp.dto.SessionDto;
@@ -57,7 +58,7 @@ public class StudyCalendarController {
 		
 		List<StudySession> sessions = service.makeSessions(obligations);
 		
-//		Collections.sort()
+		Collections.sort(sessions, new Sorter());
 		
 		List<SessionDto> dtos = new ArrayList<>();
 		for(StudySession s : sessions) {
@@ -86,4 +87,11 @@ public class StudyCalendarController {
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
+	class Sorter implements Comparator<StudySession>
+	{
+	    public int compare(StudySession a, StudySession b)
+	    {
+	        return a.getDateAndTime().compareTo(b.getDateAndTime());
+	    }
+	}
 }
