@@ -29,10 +29,16 @@ rule "Inject Obligations"
         	and
         	LocalDate($date : this) from $obligation.getStudyStartDate().datesUntil($obligation.getStudyEndDate().plusDays(1)).collect(Collectors.toList()),
         	
-        	$newSessions: collectList(new StudySession($date, $calendar, $obligation))
+        	$newSessions: collectList(new StudySession($date, $calendar, $obligation)),
+        	$usedDates: collectSet($date)
         )
     then
     	System.out.println("-------------------------- NEW AND RENEWED RULEEEE 1--------------------");
+    	System.out.println("Moguci datumi za ucenje: " );
+    	for(Object d: $usedDates){
+    		System.out.println(d.toString());
+    	}
+    	
     	$calendar.setSessions($newSessions);
     	$calendar.setObligationsInjected(true);
     	System.out.println("--------------Sad cemo izaci iz inject obligations --------------------");
@@ -73,9 +79,7 @@ rule "Create Sessions"
  	when
         $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == true, sessionsCreated == false)
     then
-    	System.out.println("HEJ CAO EVO NAS U PRAVILU CREATE_________1___________________________________");
         $calendar = service.createSessions($calendar);
         $calendar.setSessionsCreated(true);
-        System.out.println("HEJ CAO EVO NAS U PRAVILU CREATE_________2___________________________________");
         update($calendar);
 end 

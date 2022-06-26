@@ -117,36 +117,8 @@ public class StudyCalendarService {
 		return mapa;
 	}
 
-	//CALCULATE PRIORITIES
-	public StudyCalendar calculatePriorities(StudyCalendar cal) {
-		System.out.println("____________________CALCULATE PRIORITIES FNKCIJA");
-		Map<LocalDate, ArrayList<StudySession>> dummy = getMapFromList(cal.getSessions());
-		
-		for(LocalDate date :dummy.keySet()) {
-			ArrayList<StudySession> sessions = dummy.get(date);
-			
-			Collections.sort(sessions, new SortByPriority());
-			int i = 1;
-			for (StudySession s : sessions) {
-				s.setPriority(i);
-				i++;
-			}
-			
-			dummy.put(date, sessions);
-		}
-		
-		cal.setSessions(getListFromMap(dummy));
-		System.out.println("___________________________SAD TREBA DA IZADJEMO IZ CALCULAT EPRIORITIS");
-		return cal;
-	}
-	
-	
-	
-
-	
 	//CREATE SESSIONS
 	public StudyCalendar createSessions(StudyCalendar cal) {
-		System.out.println("_______________________DA LI SMO STVARNO DOSPLEI U CREATE SESSIONS FUNKCIJU HEJ JEJ");
 		//podelimo broj sati na broj dana
 		List<Obligation> obs= new ArrayList<>(cal.getObligations());
 		Map<LocalDate, ArrayList<StudySession>> sess= getMapFromList(cal.getSessions());
@@ -184,8 +156,6 @@ public class StudyCalendarService {
 		}
 		List<StudySession> sessions = removeEmptySessions(getListFromMap(sess));
 		cal.setSessions(sessions);
-		
-		System.out.println("____________________________SAD TREBA DA IZADJEMO IZ CREATE SESSIONS");
 		return cal;
 	}
 	
