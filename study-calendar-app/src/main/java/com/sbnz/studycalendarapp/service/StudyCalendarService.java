@@ -53,11 +53,10 @@ public class StudyCalendarService {
 	}
 	
 	public List<StudySession> getPrioritizedSessions(List<StudySession> sessions){
-		Collections.sort(sessions, new SortByPriority());
+		Collections.sort(sessions,  Collections.reverseOrder(new SortByPriority()));
 		return sessions.stream().map(s -> new StudySession(s, sessions.indexOf(s) + 1)).collect(Collectors.toList());
 	}
-	
-	
+
 	
 	public List<StudySession> makeSessions(List<Obligation> obligations) {
 		
@@ -92,25 +91,25 @@ public class StudyCalendarService {
 		return sc.getSessions();
 	}
 	
-	private List<StudySession> getListFromMap(Map<LocalDate, List<StudySession>> sessions) {
+	private List<StudySession> getListFromMap(Map<LocalDate, ArrayList<StudySession>> sess) {
 		List<StudySession> lista = new ArrayList<>();
 		
-		for(LocalDate date : sessions.keySet()) {
-			lista.addAll(sessions.get(date));
+		for(LocalDate date : sess.keySet()) {
+			lista.addAll(sess.get(date));
 		}
 		return lista;
 	}
 
-	private Map<LocalDate, List<StudySession>> getMapFromList(List<StudySession> lista) {
-		Map<LocalDate, List<StudySession>> mapa = new HashMap<>();
+	private Map<LocalDate, ArrayList<StudySession>> getMapFromList(List<StudySession> lista) {
+		Map<LocalDate, ArrayList<StudySession>> mapa = new HashMap<>();
 		
 		for(StudySession s : lista) {
 			LocalDate date = s.getDate();
 			boolean isKeyPresent = mapa.containsKey(date);
 			if(!isKeyPresent) {
-				mapa.put(date, Arrays.asList(s));
+				mapa.put(date, new ArrayList<>(Arrays.asList(s))); 
 			}else {
-				List<StudySession> sesije = mapa.get(date);
+				ArrayList<StudySession> sesije = mapa.get(date);
 				sesije.add(s);
 				mapa.put(date, sesije);
 			}
@@ -121,10 +120,10 @@ public class StudyCalendarService {
 	//CALCULATE PRIORITIES
 	public StudyCalendar calculatePriorities(StudyCalendar cal) {
 		System.out.println("____________________CALCULATE PRIORITIES FNKCIJA");
-		Map<LocalDate, List<StudySession>> dummy = getMapFromList(cal.getSessions());
+		Map<LocalDate, ArrayList<StudySession>> dummy = getMapFromList(cal.getSessions());
 		
 		for(LocalDate date :dummy.keySet()) {
-			List<StudySession> sessions = dummy.get(date);
+			ArrayList<StudySession> sessions = dummy.get(date);
 			
 			Collections.sort(sessions, new SortByPriority());
 			int i = 1;
@@ -150,7 +149,7 @@ public class StudyCalendarService {
 		System.out.println("_______________________DA LI SMO STVARNO DOSPLEI U CREATE SESSIONS FUNKCIJU HEJ JEJ");
 		//podelimo broj sati na broj dana
 		List<Obligation> obs= new ArrayList<>(cal.getObligations());
-		Map<LocalDate, List<StudySession>> sess= getMapFromList(cal.getSessions());
+		Map<LocalDate, ArrayList<StudySession>> sess= getMapFromList(cal.getSessions());
 		
 		Collections.sort(obs, new SortByAvg());
 		
@@ -170,7 +169,7 @@ public class StudyCalendarService {
 					sess = clearEmptySessions(sess,o);
 				}
 				//provera da li je taj dan zauzet?
-				List<StudySession> exList = sess.get(date); //lista sesija
+				ArrayList<StudySession> exList = sess.get(date); //lista sesija
 				for(StudySession s : exList) {
 					if(s.getObligation() == o) {
 						s.setDurationInHours(hoursPerDay);
@@ -201,12 +200,12 @@ public class StudyCalendarService {
 	}
 
 
-	private Map<LocalDate, List<StudySession>> clearEmptySessions(Map<LocalDate, List<StudySession>> sessions, Obligation o) {
+	private Map<LocalDate, ArrayList<StudySession>> clearEmptySessions(Map<LocalDate, ArrayList<StudySession>> sess2, Obligation o) {
 		//sve sesije koje su za tu obligaciju i prazne su, izbrisi
-		Map<LocalDate, List<StudySession>> sess=   new HashMap<>(sessions);
+		Map<LocalDate, ArrayList<StudySession>> sess=   new HashMap<>(sess2);
 		
-		for(LocalDate date : sessions.keySet()) {
-			List<StudySession> lista = sessions.get(date);
+		for(LocalDate date : sess2.keySet()) {
+			List<StudySession> lista = sess2.get(date);
 			for(StudySession s: lista) {
 				if(s.getObligation() == o && (s.getDurationInHours() == 0.0)) {
 					//U NASOJ DUMMY LISTI BRISEMO

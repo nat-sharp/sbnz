@@ -53,17 +53,8 @@ rule "Calculate Priorities"
         	),
         	
         	$successList: collectList($tempList.addAll(service.getPrioritizedSessions($currentDateSessions) ))
-        ) //kolekt list ce imati jedno true unutra, nadamo se
+        )
         eval($successList.size() > 0)
-
-        //accumulate(
-        //	StudySession($currentDate: date, priority == 0) from $sessions
-        //	and
-        //	$currentDateSessions: List(size > 0) from collect ( StudySession( date.equals($currentDate), priority == 0) from $sessions)
-     	//	and //ako ne, onda count, pa eval
-     	//	$tempList.addAll( service.getPrioritizedFromSorted(Collections.sort($currentDateSessions, new SortByPriority()))   )
-     	//)
-     	//eval($tempList.size() > 0)
         
    	then
    		System.out.println("-------------------------- NEW AND RENEWED RULEEEE 2--------------------");
