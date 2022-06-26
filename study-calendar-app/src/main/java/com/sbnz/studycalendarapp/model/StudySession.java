@@ -1,6 +1,7 @@
 package com.sbnz.studycalendarapp.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -46,6 +47,18 @@ public class StudySession implements Serializable{
 		super();
 	}
 
+	public StudySession(LocalDate datum, StudyCalendar sc, Obligation o) {
+		super();
+		this.id = null;
+		this.dateAndTime = datum.atStartOfDay();
+		this.durationInHours = 0;
+		this.isDone = false;
+		this.obligation = o;
+		this.studyCalendar = sc;
+		this.priority = 0;
+		
+	}
+	
 	public StudySession(Integer id, LocalDateTime dateAndTime, float durationInHours, boolean isDone,
 			Obligation obligation, StudyCalendar studyCalendar, int priority) {
 		super();
@@ -155,7 +168,5 @@ public class StudySession implements Serializable{
 		
 		return dto;
 	}
-
-	
 	
 }

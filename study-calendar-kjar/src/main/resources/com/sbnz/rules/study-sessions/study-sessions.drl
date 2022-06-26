@@ -5,19 +5,48 @@ import com.sbnz.studycalendarapp.model.Subject;
 import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.service.StudyCalendarService;
 import com.sbnz.studycalendarapp.model.StudyCalendar;
+import com.sbnz.studycalendarapp.model.StudySession;
+
+import java.time.LocalDate;
+import java.util.stream.Collectors;
+import java.util.List;
+import java.util.ArrayList;
 
 global StudyCalendarService service;
 
+
+
 rule "Inject Obligations"
-    when
-        $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false)
+
+	when
+        $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false, 
+        $obligations: obligations)
+
+        accumulate(
+        	Obligation($obligation: this) from $obligations
+        	and
+        	LocalDate($date : this) from $obligation.getStudyStartDate().datesUntil($obligation.getStudyEndDate().plusDays(1)).collect(Collectors.toList()),
+        	
+        	$newSessions: collectList(new StudySession($date, $calendar, $obligation))
+        )
     then
-        //pozovi iz servisa metodu
-        System.out.println("HEJ CAO EVO NAS U PRAVILU INJET____1________________________________________");
-        $calendar = service.injectObligations($calendar);
-        $calendar.setObligationsInjected(true);
-        System.out.println("HEJ CAO EVO NAS U PRAVILU INJET_____2_______________________________________");
-        update($calendar);
+    	System.out.println("-------------------------- NEW AND RENEWED RULEEEE --------------------");
+    	$calendar.setSessions($newSessions);
+    	$calendar.setObligationsInjected(true);
+    	System.out.println("--------------Sad cemo izaci iz inject obligations --------------------");
+		update($calendar);
+
+
+
+  //  when
+ //       $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false)
+ //   then
+ //       //pozovi iz servisa metodu
+ //       System.out.println("HEJ CAO EVO NAS U PRAVILU INJET____1________________________________________");
+ //      $calendar = service.injectObligations($calendar);
+  //      $calendar.setObligationsInjected(true);
+  //      System.out.println("HEJ CAO EVO NAS U PRAVILU INJET_____2_______________________________________");
+   //     update($calendar);
 end 
 
 
