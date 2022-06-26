@@ -8,7 +8,7 @@ public class SortByAvg implements Comparator<Obligation> {
 	 
     public int compare(Obligation a, Obligation b)
     {
-        return  (int) (a.getStudyHours()/ (a.getStudyStartDate().datesUntil(a.getStudyEndDate())).count()
-        		- b.getStudyHours()/ (b.getStudyStartDate().datesUntil(b.getStudyEndDate())).count());
+        return  (int) (a.getStudyHours()/ (a.getStudyStartDate().datesUntil(a.getStudyEndDate().plusDays(1))).count()
+        		- b.getStudyHours()/ (b.getStudyStartDate().datesUntil(b.getStudyEndDate().plusDays(1))).count());
     }
 }

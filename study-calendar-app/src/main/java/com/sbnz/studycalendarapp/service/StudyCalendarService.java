@@ -158,14 +158,14 @@ public class StudyCalendarService {
 		//po tom rasporedu- krenemo
 		//rasporedimo sesije ne manje od 2 sata redom svaki dan, i zaokruzene na vise od onog proseka
 		for(Obligation o: obs) {
-			float avgHrsPerDay = o.getStudyHours()/ (o.getStudyStartDate().datesUntil(o.getStudyEndDate()).collect(Collectors.toList())).size();
+			float avgHrsPerDay = o.getStudyHours()/ (o.getStudyStartDate().datesUntil(o.getStudyEndDate().plusDays(1)).collect(Collectors.toList())).size();
 			float hoursPerDay = avgHrsPerDay;
 			if(avgHrsPerDay < 2) {
 				hoursPerDay = 2;
 			}
 			
 			float current = o.getStudyHours();
-			for(LocalDate date : o.getStudyStartDate().datesUntil(o.getStudyEndDate()).collect(Collectors.toList())) {
+			for(LocalDate date : o.getStudyStartDate().datesUntil(o.getStudyEndDate().plusDays(1)).collect(Collectors.toList())) {
 				if (current<= 0.0) {
 					sess = clearEmptySessions(sess,o);
 				}
