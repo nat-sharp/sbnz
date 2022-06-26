@@ -6,14 +6,16 @@ import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.service.StudyCalendarService;
 import com.sbnz.studycalendarapp.model.StudyCalendar;
 import com.sbnz.studycalendarapp.model.StudySession;
+import com.sbnz.studycalendarapp.util.SortByPriority;
 
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 global StudyCalendarService service;
-
+global List<StudySession> $tempList;
 
 
 rule "Inject Obligations"
@@ -30,36 +32,47 @@ rule "Inject Obligations"
         	$newSessions: collectList(new StudySession($date, $calendar, $obligation))
         )
     then
-    	System.out.println("-------------------------- NEW AND RENEWED RULEEEE --------------------");
+    	System.out.println("-------------------------- NEW AND RENEWED RULEEEE 1--------------------");
     	$calendar.setSessions($newSessions);
     	$calendar.setObligationsInjected(true);
     	System.out.println("--------------Sad cemo izaci iz inject obligations --------------------");
 		update($calendar);
-
-
-
-  //  when
- //       $calendar: StudyCalendar( obligationsInjected == false, prioritiesCalculated == false, sessionsCreated == false)
- //   then
- //       //pozovi iz servisa metodu
- //       System.out.println("HEJ CAO EVO NAS U PRAVILU INJET____1________________________________________");
- //      $calendar = service.injectObligations($calendar);
-  //      $calendar.setObligationsInjected(true);
-  //      System.out.println("HEJ CAO EVO NAS U PRAVILU INJET_____2_______________________________________");
-   //     update($calendar);
 end 
 
 
 
 rule "Calculate Priorities"
- 	when
-        $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == false, sessionsCreated == false)
-    then
-    	System.out.println("HEJ CAO EVO NAS U PRAVILU CALC_________1___________________________________");
-        $calendar = service.calculatePriorities($calendar);
-        $calendar.setPrioritiesCalculated(true);
-        System.out.println("HEJ CAO EVO NAS U PRAVILU CALC_________2___________________________________");
-        update($calendar);
+	when
+        $calendar: StudyCalendar( obligationsInjected == true, prioritiesCalculated == false, sessionsCreated == false, $sessions: sessions)
+
+        accumulate(
+        	StudySession($currentDate: date, priority == 0) from $sessions
+        	and
+        	$currentDateSessions: List(size > 0) from collect (
+      			StudySession( date.equals($currentDate), priority == 0) from $sessions
+        	),
+        	
+        	$successList: collectList($tempList.addAll(service.getPrioritizedSessions($currentDateSessions) ))
+        ) //kolekt list ce imati jedno true unutra, nadamo se
+        eval($successList.size() > 0)
+
+        //accumulate(
+        //	StudySession($currentDate: date, priority == 0) from $sessions
+        //	and
+        //	$currentDateSessions: List(size > 0) from collect ( StudySession( date.equals($currentDate), priority == 0) from $sessions)
+     	//	and //ako ne, onda count, pa eval
+     	//	$tempList.addAll( service.getPrioritizedFromSorted(Collections.sort($currentDateSessions, new SortByPriority()))   )
+     	//)
+     	//eval($tempList.size() > 0)
+        
+   	then
+   		System.out.println("-------------------------- NEW AND RENEWED RULEEEE 2--------------------");
+    	$calendar.setSessions($tempList);
+        								 
+    	$calendar.setPrioritiesCalculated(true);
+    	System.out.println("--------------Sad cemo izaci iz calculate priorities --------------------");
+		update($calendar);
+
 end 
 
 

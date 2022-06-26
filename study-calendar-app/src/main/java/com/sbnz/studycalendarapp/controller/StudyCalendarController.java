@@ -91,7 +91,7 @@ public class StudyCalendarController {
 	{
 	    public int compare(StudySession a, StudySession b)
 	    {
-	        return a.getDateAndTime().compareTo(b.getDateAndTime());
+	        return a.getDate().compareTo(b.getDate());
 	    }
 	}
 }

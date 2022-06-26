@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,8 @@ import com.sbnz.studycalendarapp.model.StudySession;
 import com.sbnz.studycalendarapp.repository.ObligationRepository;
 import com.sbnz.studycalendarapp.repository.StudyCalendarRepository;
 import com.sbnz.studycalendarapp.repository.StudySessionRepository;
+import com.sbnz.studycalendarapp.util.SortByAvg;
+import com.sbnz.studycalendarapp.util.SortByPriority;
 
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -51,6 +52,12 @@ public class StudyCalendarService {
 		return this.studyCalendarRepository.findByStudentId(id);
 	}
 	
+	public List<StudySession> getPrioritizedSessions(List<StudySession> sessions){
+		Collections.sort(sessions, new SortByPriority());
+		return sessions.stream().map(s -> new StudySession(s, sessions.indexOf(s) + 1)).collect(Collectors.toList());
+	}
+	
+	
 	
 	public List<StudySession> makeSessions(List<Obligation> obligations) {
 		
@@ -68,6 +75,7 @@ public class StudyCalendarService {
 		
 		kieSession.insert(calendar);
 		kieSession.setGlobal("service", this);
+		kieSession.setGlobal("$tempList", new ArrayList<StudySession>());
 		kieSession.fireAllRules();
 		kieSession.dispose();
 		
@@ -84,39 +92,6 @@ public class StudyCalendarService {
 		return sc.getSessions();
 	}
 	
-	//INJECT OBLIGATIONS
-	
-	public StudyCalendar injectObligations(StudyCalendar cal) {
-		Map<LocalDate, List<StudySession>> sessions = new HashMap<>();
-		System.out.println("______________________________SAD SMO U INJECT OBLIGATIONS");
-		
-		for(Obligation obligation : cal.getObligations()) {
-			List<LocalDate> listOfDates = obligation.getStudyStartDate().datesUntil(obligation.getStudyEndDate().plusDays(1)).collect(Collectors.toList());
-			
-			for(LocalDate date : listOfDates) {
-				boolean isKeyPresent = sessions.containsKey(date);
-				StudySession newSession = new StudySession();
-				newSession.setObligation(obligation);
-				newSession.setDateAndTime(date.atStartOfDay());
-				
-				if(isKeyPresent) {
-					List<StudySession> exList = sessions.get(date);
-					exList.add(newSession);
-					sessions.put(date, exList);
-					
-				} else {
-					sessions.put(date, Arrays.asList(newSession));
-				}
-			}
-		}
-		System.out.println("_____________________________________SAD TREBA DA IZADJEMO IZ INJECT OBLIGATIONS");
-		System.out.print(sessions);
-		
-		cal.setSessions(getListFromMap(sessions));
-		return cal;
-	}
-	
-	
 	private List<StudySession> getListFromMap(Map<LocalDate, List<StudySession>> sessions) {
 		List<StudySession> lista = new ArrayList<>();
 		
@@ -130,7 +105,7 @@ public class StudyCalendarService {
 		Map<LocalDate, List<StudySession>> mapa = new HashMap<>();
 		
 		for(StudySession s : lista) {
-			LocalDate date = s.getDateAndTime().toLocalDate();
+			LocalDate date = s.getDate();
 			boolean isKeyPresent = mapa.containsKey(date);
 			if(!isKeyPresent) {
 				mapa.put(date, Arrays.asList(s));
@@ -166,14 +141,7 @@ public class StudyCalendarService {
 		return cal;
 	}
 	
-	class SortByPriority implements Comparator<StudySession> {
-		 
-	    public int compare(StudySession a, StudySession b)
-	    {
-	 
-	        return  (int) (a.getObligation().getMaxPoints() - b.getObligation().getMaxPoints());
-	    }
-	}
+	
 	
 
 	
@@ -250,13 +218,6 @@ public class StudyCalendarService {
 		return sess;
 	}
 
-	class SortByAvg implements Comparator<Obligation> {
-		 
-	    public int compare(Obligation a, Obligation b)
-	    {
-	        return  (int) (a.getStudyHours()/ (a.getStudyStartDate().datesUntil(a.getStudyEndDate())).count()
-	        		- b.getStudyHours()/ (b.getStudyStartDate().datesUntil(b.getStudyEndDate())).count());
-	    }
-	}
+	
 
 }

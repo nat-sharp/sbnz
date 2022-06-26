@@ -1,11 +1,12 @@
 package com.sbnz.studycalendarapp.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class SessionDto {
 
 	private Integer id;
-	private LocalDateTime dateAndTime;
+	private LocalDate date;
 	private float durationInHours;
 	private String obligationname;
 	private int priority;
@@ -15,11 +16,11 @@ public class SessionDto {
 	}	
 	
 	
-	public SessionDto(Integer id, LocalDateTime dateAndTime, float durationInHours, String obligationname,
+	public SessionDto(Integer id, LocalDate date, float durationInHours, String obligationname,
 			int priority) {
 		super();
 		this.id = id;
-		this.dateAndTime = dateAndTime;
+		this.date = date;
 		this.durationInHours = durationInHours;
 		this.obligationname = obligationname;
 		this.priority = priority;
@@ -34,11 +35,11 @@ public class SessionDto {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public LocalDateTime getDateAndTime() {
-		return dateAndTime;
+	public LocalDate getDateAndTime() {
+		return date;
 	}
-	public void setDateAndTime(LocalDateTime dateAndTime) {
-		this.dateAndTime = dateAndTime;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 	public float getDurationInHours() {
 		return durationInHours;

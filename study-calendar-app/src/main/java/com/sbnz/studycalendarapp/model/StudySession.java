@@ -2,7 +2,6 @@ package com.sbnz.studycalendarapp.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -25,8 +24,8 @@ public class StudySession implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name="date_and_time")
-	private LocalDateTime dateAndTime;
+	@Column(name="date")
+	private LocalDate date;
 	
 	@Column(name="duration_in_hours")
 	private float durationInHours;
@@ -50,7 +49,7 @@ public class StudySession implements Serializable{
 	public StudySession(LocalDate datum, StudyCalendar sc, Obligation o) {
 		super();
 		this.id = null;
-		this.dateAndTime = datum.atStartOfDay();
+		this.date = datum;
 		this.durationInHours = 0;
 		this.isDone = false;
 		this.obligation = o;
@@ -59,18 +58,28 @@ public class StudySession implements Serializable{
 		
 	}
 	
-	public StudySession(Integer id, LocalDateTime dateAndTime, float durationInHours, boolean isDone,
+	public StudySession(StudySession orig, int priority) {
+		this.id = orig.getId();
+		this.date = orig.getDate();
+		this.durationInHours = orig.getDurationInHours();
+		this.isDone = orig.isDone();
+		this.obligation = orig.getObligation();
+		this.studyCalendar = orig.getStudyCalendar();
+		
+		this.priority = priority;
+	}
+	
+	public StudySession(Integer id, LocalDate date, float durationInHours, boolean isDone,
 			Obligation obligation, StudyCalendar studyCalendar, int priority) {
 		super();
 		this.id = id;
-		this.dateAndTime = dateAndTime;
+		this.date = date;
 		this.durationInHours = durationInHours;
 		this.isDone = isDone;
 		this.obligation = obligation;
 		this.studyCalendar = studyCalendar;
 		this.priority = priority;
 	}
-
 
 	public StudyCalendar getStudyCalendar() {
 		return studyCalendar;
@@ -96,14 +105,15 @@ public class StudySession implements Serializable{
 		this.priority = priority;
 	}
 
-	public LocalDateTime getDateAndTime() {
-		return dateAndTime;
+
+	public LocalDate getDate() {
+		return date;
 	}
-	
-	public void setDateAndTime(LocalDateTime dateAndTime) {
-		this.dateAndTime = dateAndTime;
+
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
-	
+
 	public boolean isDone() {
 		return isDone;
 	}
@@ -130,9 +140,17 @@ public class StudySession implements Serializable{
 		
 	}
 
+
+	@Override
+	public String toString() {
+		return "StudySession [id=" + id + ", date=" + date + ", durationInHours=" + durationInHours + ", isDone="
+				+ isDone + ", priority=" + priority
+				+ "]";
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateAndTime, durationInHours, id, isDone, obligation, priority, studyCalendar);
+		return Objects.hash(date, durationInHours, id, isDone, priority);
 	}
 
 	@Override
@@ -144,24 +162,17 @@ public class StudySession implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		StudySession other = (StudySession) obj;
-		return Objects.equals(dateAndTime, other.dateAndTime)
+		return Objects.equals(date, other.date)
 				&& Float.floatToIntBits(durationInHours) == Float.floatToIntBits(other.durationInHours)
 				&& Objects.equals(id, other.id) && isDone == other.isDone
 				&& Objects.equals(obligation, other.obligation) && priority == other.priority
 				&& Objects.equals(studyCalendar, other.studyCalendar);
 	}
 
-	@Override
-	public String toString() {
-		return "StudySession [id=" + id + ", dateAndTime=" + dateAndTime + ", durationInHours=" + durationInHours
-				+ ", isDone=" + isDone + ", obligation=IZBACILA" + ", studyCalendar=IZBACILA"
-				+ ", priority=" + priority + "]";
-	}
-
 	public SessionDto toDto() {
 		SessionDto dto = new SessionDto();
 		dto.setId(id);
-		dto.setDateAndTime(dateAndTime);
+		dto.setDate(date);
 		dto.setDurationInHours(durationInHours);
 		dto.setPriority(priority);
 		dto.setObligationname(obligation.getName());
