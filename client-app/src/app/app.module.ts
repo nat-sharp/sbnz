@@ -31,6 +31,7 @@ import { AddSubjectDialogComponent } from './subjects/add-subject-dialog/add-sub
 import { FinishObligationDialogComponent } from './obligations/finish-obligation-dialog/finish-obligation-dialog.component';
 import { AddObligationDialogComponent } from './obligations/add-obligation-dialog/add-obligation-dialog.component';
 import { SessionsComponent } from './sessions/sessions.component';
+import { ReportsComponent } from './reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SessionsComponent } from './sessions/sessions.component';
     AddSubjectDialogComponent,
     FinishObligationDialogComponent,
     AddObligationDialogComponent,
-    SessionsComponent
+    SessionsComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,

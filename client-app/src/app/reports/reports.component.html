@@ -1,0 +1,50 @@
+<div class="centered">
+  <mat-card>
+      <mat-card-header>
+          <mat-card-title>Reports</mat-card-title>
+      </mat-card-header>
+      <br>
+
+      <mat-card-content>
+
+        <table mat-table [dataSource]="reps" class="mat-elevation-z8">
+        
+            <ng-container matColumnDef="position">
+              <th mat-header-cell  *matHeaderCellDef><b>No.</b></th>
+              <td mat-cell id="row{{i+1}}" *matCellDef="let element; let i = index">{{i+1}}.</td>
+            </ng-container>
+        
+            <ng-container matColumnDef="studentName">
+              <th mat-header-cell   *matHeaderCellDef><b>Student</b></th>
+              <td mat-cell *matCellDef="let element">{{element.studentName}}</td>
+            </ng-container>
+        
+            <ng-container matColumnDef="points">
+              <th mat-header-cell  *matHeaderCellDef><b>Points</b></th>
+              <td mat-cell *matCellDef="let element">{{element.points}}</td>
+            </ng-container>
+        
+            <ng-container matColumnDef="category">
+              <th mat-header-cell   *matHeaderCellDef><b>Category (by academic points)</b></th>
+              <td mat-cell *matCellDef="let element">{{element.category}}</td>
+            </ng-container>
+        
+            <ng-container matColumnDef="status">
+              <th mat-header-cell   *matHeaderCellDef><b>Status (by application activity)</b></th>
+              <td mat-cell *matCellDef="let element">{{element.status}}</td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        
+            <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            ></tr>
+        </table>
+      </mat-card-content>
+      <mat-card-actions>
+          <button mat-raised-button (click)="back()">BACK</button>
+      </mat-card-actions>
+      <br>
+  </mat-card>
+</div>

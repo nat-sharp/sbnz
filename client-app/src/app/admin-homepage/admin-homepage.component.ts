@@ -13,7 +13,7 @@ export class AdminHomepageComponent implements OnInit {
   ngOnInit(): void { }
 
   reports() {
-    // TODO
+    this.router.navigate(["/reports"]);
   }
 
   logOut() {

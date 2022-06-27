@@ -14,4 +14,9 @@ export class AdminService {
   login(loginDto: any): Observable<string> {
     return this.http.post(this.URL + 'login', loginDto, { responseType: 'text' });
   }
+
+  getReport(): Observable<any> {
+    return this.http.get(this.URL + 'report');
+  }
+
 }

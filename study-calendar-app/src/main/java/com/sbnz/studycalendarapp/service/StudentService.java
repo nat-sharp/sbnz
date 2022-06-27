@@ -1,6 +1,7 @@
 package com.sbnz.studycalendarapp.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.sbnz.studycalendarapp.model.Student;
 import com.sbnz.studycalendarapp.model.StudyCalendar;
@@ -36,6 +37,10 @@ public class StudentService {
 	
 	public Student save(Student student) {
 		return repository.save(student);
+	}
+	
+	public List<Student> getAll() {
+		return repository.findAll();
 	}
 	
 	public String calculateStatus(StudyCalendar cal) {

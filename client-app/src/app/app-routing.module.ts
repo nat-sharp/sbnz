@@ -6,6 +6,7 @@ import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { LoginStudentComponent } from './login-student/login-student.component';
 import { ObligationsComponent } from './obligations/obligations.component';
 import { RegisterComponent } from './register/register.component';
+import { ReportsComponent } from './reports/reports.component';
 import { SessionsComponent } from './sessions/sessions.component';
 import { StudentHomepageComponent } from './student-homepage/student-homepage.component';
 import { SubjectsComponent } from './subjects/subjects.component';
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'subjects', component: SubjectsComponent },
   { path: 'obligations', component: ObligationsComponent },
-  { path: 'sessions', component: SessionsComponent}
+  { path: 'sessions', component: SessionsComponent},
+  { path: 'reports', component: ReportsComponent}
 ];
 
 @NgModule({
