@@ -1,7 +1,7 @@
 package com.sbnz.studycalendarapp.enums;
 
 public enum StudentActivity {
-	BEGGINER,
+	BEGINNER,
 	HARD_WORKING,
 	PROFESSIONAL
 }

@@ -1,13 +1,17 @@
 package com.sbnz;
 
 import com.sbnz.studycalendarapp.model.*;
-package com.sbnz.studycalendarapp.enums.StudentActivity;
+import com.sbnz.studycalendarapp.enums.StudentActivity;
+
+global String $calculatedStatuses;
 
 rule "Start"
 	lock-on-active
+	salience 100
 	when
 		eval(true)
 	then
+		System.out.println("----- ulazimo Start");
 		insert(new Fact("Beginner status", "Student: BEGINNER"));
 		insert(new Fact("Student: BEGINNER", "Finished 0-5 sessions"));
 		
@@ -18,28 +22,34 @@ rule "Start"
 		insert(new Fact("Student: PROFESSIONAL", "Finished 10+ sessions"));
 		
 		insert(new Fact("Slacker status", "Skipped 2+ obligations"));
+		System.out.println("----- izlazimo Start");
 end
 
 rule "Pocetnik 1"
+	salience 70
 	when
 		Student($id: id, activity == StudentActivity.BEGINNER)
 	then
 		insert(new Fact("Student: BEGINNER", $id.toString()));
+		System.out.println("----- p 1");
 end
 
 rule "Pocetnik 2"
+	salience 70
 	when
-		StudyCalendar($s: student, $sessions: sessions) //valjda ce uspeti
+		StudyCalendar($st: student, $sessions: sessions) //valjda ce uspeti
 		Number($value: intValue <= 5) from accumulate(
-			StudySession($s: this, isDone == true) from $sessions,
+			StudySession(isDone == true, $sesh: id) from $sessions,
 			
-			count($s)
+			count($sesh)
 		)
 	then
-		insert(new Fact("Finished 0-5 sessions", $s.getId().toString()));
+		insert(new Fact("Finished 0-5 sessions", $st.getId().toString()));
+		System.out.println("----- p2");
 end
 
 rule "Neutral 1"
+	salience 70
 	when
 		Student($id: id, activity == StudentActivity.HARD_WORKING)
 	then
@@ -47,31 +57,35 @@ rule "Neutral 1"
 end
 
 rule "Neutral 2"
+	salience 70
 	when
-		StudyCalendar($s: student, $sessions: sessions) //valjda ce uspeti
-		Number($value: intValue > 5, $value: intValue <= 10 ) from accumulate(
-			StudySession($s: this, isDone == true) from $sessions,
+		StudyCalendar($st: student, $sessions: sessions) //valjda ce uspeti
+		Number($value: intValue > 5, $value <= 10 ) from accumulate(
+			StudySession(isDone == true, $sesh: id) from $sessions,
 			
-			count($s)
+			count($sesh)
 		)
 	then
-		insert(new Fact("Finished 5-10 sessions", $s.getId().toString()));
+		insert(new Fact("Finished 5-10 sessions", $st.getId().toString()));
 end
 
 rule "Neutral 3"
+	salience 70
 	when
-		StudyCalendar($s: student, $obligations: obligations) //valjda ce uspeti
+		StudyCalendar($st: student, $obligations: obligations) //valjda ce uspeti
+		
 		Number($value: intValue > 2) from accumulate(
 			Obligation($o: this, finished == true) from $obligations,
 			
 			count($o)
 		)
 	then
-		insert(new Fact("Student: HARD WORKING", "Finished 2+ obligations");
-		insert(new Fact("Finished 2+ obligations", $s.getId().toString()));
+		insert(new Fact("Student: HARD WORKING", "Finished 2+ obligations"));
+		insert(new Fact("Finished 2+ obligations", $st.getId().toString()));
 end
 
 rule "Professional 1"
+	salience 70
 	when
 		Student($id: id, activity == StudentActivity.PROFESSIONAL)
 	then
@@ -79,44 +93,88 @@ rule "Professional 1"
 end
 
 rule "Professional 2"
+	salience 70
 	when
-		StudyCalendar($s: student, $sessions: sessions) //valjda ce uspeti
+		StudyCalendar($st: student, $sessions: sessions) //valjda ce uspeti
 			Number($value: intValue > 10) from accumulate(
-				StudySession($s: this, isDone == true) from $sessions,
+				StudySession($sesh: this, isDone == true) from $sessions,
 				
-				count($s)
+				count($sesh)
 			)
 	then
-		insert(new Fact("Finished 10+ sessions", $s.getId()));
+		insert(new Fact("Finished 10+ sessions", $st.getId().toString()));
 end
 
 rule "Professional 3"
+	salience 70
 	when
-		StudyCalendar($s: student, $obligations: obligations) //valjda ce uspeti
+		StudyCalendar($st: student, $obligations: obligations) //valjda ce uspeti
 		Number($value: intValue > 5) from accumulate(
 			Obligation($o: this, finished == true) from $obligations,
 			
 			count($o)
 		)
 	then
-		insert(new Fact("Student: PROFESSIONAL", "Finished 5+ obligations");
-		insert(new Fact("Finished 5+ obligations", $s.getId().toString()));
+		insert(new Fact("Student: PROFESSIONAL", "Finished 5+ obligations"));
+		insert(new Fact("Finished 5+ obligations", $st.getId().toString()));
 end
 
 rule "Slacker 1"
+	salience 70
 	when
-		StudyCalendar($s: student, $obligations: obligations) //valjda ce uspeti
+		StudyCalendar($st: student, $obligations: obligations) //valjda ce uspeti
 		Number($value: intValue > 2) from accumulate(
 			Obligation($o: this, skipped == true) from $obligations,
 			
 			count($o)
 		)
 	then
-		insert(new Fact("Skipped 2+ obligations", $s.getId().toString()));
+		insert(new Fact("Skipped 2+ obligations", $st.getId().toString()));
 end
 
 query isThereAConnection(String x, String y )
   Fact( x, y; )
   or
   ( Fact( z, y; ) and isThereAConnection(  x, z; ) )
+end
+
+rule "beginner"
+	salience 50
+	no-loop
+	when
+		Student($id: id)
+		isThereAConnection("Beginner status", $id.toString();)
+	then
+		$calculatedStatuses+= " Beginner status ";
+end
+rule "hw"
+	salience 50
+	no-loop
+	when
+		Student($id: id)
+		isThereAConnection("Neutral status", $id.toString();)
+	then
+		$calculatedStatuses+= " Neutral status ";
+end
+
+rule "pro"
+	salience 50
+	no-loop
+	when
+		Student($id: id)
+		isThereAConnection("Professional status", $id.toString();)
+		
+	then
+		$calculatedStatuses+= " Professional status ";
+end
+
+rule "slacker"
+	salience 50
+	no-loop
+	when
+		Student($id: id)
+		isThereAConnection("Slacker status", $id.toString();)
+		
+	then
+		$calculatedStatuses+= " Slacker status ";
 end

@@ -106,8 +106,18 @@ public class StudyCalendarController {
 	
 	@GetMapping("/status/{username}")
 	public ResponseEntity<String> getStatus(@PathVariable String username) {
-		//TODO backward
-		return new ResponseEntity<>("You're still a beginner!", HttpStatus.OK);
+		Student student = studentService.findByUsername(username);
+		if(student == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		StudyCalendar cal = service.getByStudentId(student.getId());
+		
+		if(cal == null || cal.getSessions() == null ) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		System.out.println("_______CONTROLLER< IDE GAS");
+		String result = studentService.calculateStatus(cal);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	class Sorter implements Comparator<StudySession>

@@ -27,7 +27,7 @@ public class Mapper {
 		s.setPassword(dto.getPassword());
 		s.setConcetratedStudyHours(dto.isConcentratedStudyHours());
 		s.setCategory(dto.getCategory());
-		s.setActivity(StudentActivity.BEGGINER);
+		s.setActivity(StudentActivity.BEGINNER);
 		s.setActivityPoints(0.0);
 		return s;
 	}

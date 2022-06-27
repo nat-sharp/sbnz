@@ -136,7 +136,7 @@ public class ObligationService {
 		InputStream template = ObligationService.class.getResourceAsStream("/com/sbnz/templates/student-activity.drt");
         
         DataProvider dataProvider = new ArrayDataProvider(new String[][]{
-            new String[]{"-100000", "100", "BEGGINER"},
+            new String[]{"-100000", "100", "BEGINNER"},
             new String[]{"100", "1000", "HARD_WORKING"},
             new String[]{"1000", "100000", "PROFESSIONAL"}
         });

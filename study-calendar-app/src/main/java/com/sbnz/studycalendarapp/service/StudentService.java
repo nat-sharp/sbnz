@@ -3,6 +3,7 @@ package com.sbnz.studycalendarapp.service;
 import java.util.ArrayList;
 
 import com.sbnz.studycalendarapp.model.Student;
+import com.sbnz.studycalendarapp.model.StudyCalendar;
 import com.sbnz.studycalendarapp.model.StudySession;
 import com.sbnz.studycalendarapp.repository.StudentRepository;
 
@@ -37,24 +38,29 @@ public class StudentService {
 		return repository.save(student);
 	}
 	
-	public String calculateStatus(Student s) {
-		
+	public String calculateStatus(StudyCalendar cal) {
+		System.out.println("_______ SERVIS< IDE GAS");
 		///////////////////////////////////////
 		
 		KieSession kieSession = kieContainer.newKieSession("backwards");
 		//mogli bismo ovde insert new Fact, ali necemo
 		
-		
-		kieSession.insert(null);
-		kieSession.setGlobal("service", this);
-		kieSession.setGlobal("$tempList", new ArrayList<StudySession>());
+		System.out.println("_______ 1");
+		kieSession.insert(cal);
+		System.out.println("_______ 2");
+		kieSession.insert(cal.getStudent());
+		System.out.println("_______ 3");
+		kieSession.setGlobal("$calculatedStatuses", "");
+		System.out.println("_______ 4");
 		kieSession.fireAllRules();
+		System.out.println("_______ 5");
+		//String result = (String) kieSession.getGlobal("$calculatedStatuses");
 		kieSession.dispose();
 		//////////////////////////////////////
 		
 		//obrada stringa?
 		
-		return "hello";
+		return "hmm";
 		
 	}
 }

@@ -62,7 +62,7 @@ public class StudySession implements Serializable{
 		this.id = orig.getId();
 		this.date = orig.getDate();
 		this.durationInHours = orig.getDurationInHours();
-		this.isDone = orig.isDone();
+		this.isDone = orig.getIsDone();
 		this.obligation = orig.getObligation();
 		this.studyCalendar = orig.getStudyCalendar();
 		
@@ -114,7 +114,7 @@ public class StudySession implements Serializable{
 		this.date = date;
 	}
 
-	public boolean isDone() {
+	public boolean getIsDone() {
 		return isDone;
 	}
 	
