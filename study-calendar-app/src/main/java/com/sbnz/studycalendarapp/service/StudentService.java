@@ -44,23 +44,18 @@ public class StudentService {
 		
 		KieSession kieSession = kieContainer.newKieSession("backwards");
 		//mogli bismo ovde insert new Fact, ali necemo
-		
-		System.out.println("_______ 1");
+		Student s = cal.getStudent();
+		s.setStatus("");
+
 		kieSession.insert(cal);
-		System.out.println("_______ 2");
-		kieSession.insert(cal.getStudent());
-		System.out.println("_______ 3");
-		kieSession.setGlobal("$calculatedStatuses", "");
-		System.out.println("_______ 4");
+		kieSession.insert(s);
 		kieSession.fireAllRules();
-		System.out.println("_______ 5");
-		//String result = (String) kieSession.getGlobal("$calculatedStatuses");
 		kieSession.dispose();
 		//////////////////////////////////////
 		
-		//obrada stringa?
+		repository.save(s);
 		
-		return "hmm";
+		return s.getStatus();
 		
 	}
 }

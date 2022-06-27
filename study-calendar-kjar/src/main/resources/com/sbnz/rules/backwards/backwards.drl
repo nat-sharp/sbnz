@@ -3,7 +3,6 @@ package com.sbnz;
 import com.sbnz.studycalendarapp.model.*;
 import com.sbnz.studycalendarapp.enums.StudentActivity;
 
-global String $calculatedStatuses;
 
 rule "Start"
 	lock-on-active
@@ -15,16 +14,18 @@ rule "Start"
 		insert(new Fact("Beginner status", "Student: BEGINNER"));
 		insert(new Fact("Student: BEGINNER", "Finished 0-5 sessions"));
 		
-		insert(new Fact("Neutral status", "Student: HARD WORKING"));
+		insert(new Fact("Average status", "Student: HARD WORKING"));
 		insert(new Fact("Student: HARD WORKING", "Finished 5-10 sessions"));
+		insert(new Fact("Student: HARD WORKING", "Finished 2+ obligations"));
 		
 		insert(new Fact("Professional status", "Student: PROFESSIONAL"));
 		insert(new Fact("Student: PROFESSIONAL", "Finished 10+ sessions"));
+		insert(new Fact("Student: PROFESSIONAL", "Finished 5+ obligations"));
 		
 		insert(new Fact("Slacker status", "Skipped 2+ obligations"));
 		System.out.println("----- izlazimo Start");
 end
-
+/*
 rule "Pocetnik 1"
 	salience 70
 	when
@@ -32,7 +33,7 @@ rule "Pocetnik 1"
 	then
 		insert(new Fact("Student: BEGINNER", $id.toString()));
 		System.out.println("----- p 1");
-end
+end*/
 
 rule "Pocetnik 2"
 	salience 70
@@ -47,7 +48,7 @@ rule "Pocetnik 2"
 		insert(new Fact("Finished 0-5 sessions", $st.getId().toString()));
 		System.out.println("----- p2");
 end
-
+/*
 rule "Neutral 1"
 	salience 70
 	when
@@ -55,8 +56,8 @@ rule "Neutral 1"
 	then
 		insert(new Fact("Student: HARD WORKING", $id.toString()));
 end
-
-rule "Neutral 2"
+*/
+rule "Average 2"
 	salience 70
 	when
 		StudyCalendar($st: student, $sessions: sessions) //valjda ce uspeti
@@ -69,7 +70,7 @@ rule "Neutral 2"
 		insert(new Fact("Finished 5-10 sessions", $st.getId().toString()));
 end
 
-rule "Neutral 3"
+rule "Average 3"
 	salience 70
 	when
 		StudyCalendar($st: student, $obligations: obligations) //valjda ce uspeti
@@ -80,10 +81,10 @@ rule "Neutral 3"
 			count($o)
 		)
 	then
-		insert(new Fact("Student: HARD WORKING", "Finished 2+ obligations"));
+		System.out.println("EVO PREPOZNALI SMO DA JE 2+ OBLIGACIJE RESIO");
 		insert(new Fact("Finished 2+ obligations", $st.getId().toString()));
 end
-
+/*
 rule "Professional 1"
 	salience 70
 	when
@@ -91,7 +92,7 @@ rule "Professional 1"
 	then
 		insert(new Fact("Student: PROFESSIONAL", $id.toString()));
 end
-
+*/
 rule "Professional 2"
 	salience 70
 	when
@@ -115,7 +116,7 @@ rule "Professional 3"
 			count($o)
 		)
 	then
-		insert(new Fact("Student: PROFESSIONAL", "Finished 5+ obligations"));
+		
 		insert(new Fact("Finished 5+ obligations", $st.getId().toString()));
 end
 
@@ -130,7 +131,7 @@ rule "Slacker 1"
 		)
 	then
 		insert(new Fact("Skipped 2+ obligations", $st.getId().toString()));
-end
+end 
 
 query isThereAConnection(String x, String y )
   Fact( x, y; )
@@ -140,41 +141,49 @@ end
 
 rule "beginner"
 	salience 50
-	no-loop
+	no-loop true
 	when
-		Student($id: id)
+		$student: Student( $id: id, status != "Average status")
 		isThereAConnection("Beginner status", $id.toString();)
 	then
-		$calculatedStatuses+= " Beginner status ";
+		System.out.println("OVDE NE TREBA DA UDJEMO_________________________________________");
+		$student.setStatus("Beginner status");
+		update($student);
+		
 end
+
 rule "hw"
-	salience 50
-	no-loop
+	salience 40
+	no-loop true
 	when
-		Student($id: id)
-		isThereAConnection("Neutral status", $id.toString();)
+		$student: Student($id: id)
+		isThereAConnection("Average status", $id.toString();)
 	then
-		$calculatedStatuses+= " Neutral status ";
+		System.out.println("OVDE TREBA DA UDJEMO_________________________________________!!!!!!!!!!____________");
+		$student.setStatus( "Average status");
+		update($student);
 end
 
 rule "pro"
-	salience 50
-	no-loop
+	salience 30
+	no-loop true
 	when
-		Student($id: id)
+		$student: Student($id: id)
 		isThereAConnection("Professional status", $id.toString();)
 		
 	then
-		$calculatedStatuses+= " Professional status ";
+		$student.setStatus( "Professional status");
+		update($student);
 end
 
 rule "slacker"
-	salience 50
-	no-loop
+	salience 20
+	no-loop true
 	when
-		Student($id: id)
+		$student: Student($id: id)
 		isThereAConnection("Slacker status", $id.toString();)
 		
 	then
-		$calculatedStatuses+= " Slacker status ";
+		$student.setStatus("Slacker status");
+		update($student);
 end

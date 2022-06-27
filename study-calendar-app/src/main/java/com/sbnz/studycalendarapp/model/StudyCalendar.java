@@ -139,7 +139,7 @@ public class StudyCalendar implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, obligations, obligationsInjected, prioritiesCalculated, sessions, sessionsCreated,
+		return Objects.hash(id, obligationsInjected, prioritiesCalculated, sessionsCreated,
 				student);
 	}
 

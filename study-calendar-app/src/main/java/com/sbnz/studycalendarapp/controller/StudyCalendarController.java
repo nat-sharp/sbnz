@@ -79,7 +79,7 @@ public class StudyCalendarController {
 		}
 		StudyCalendar c = service.getByStudentId(student.getId());
 		
-		if(c == null || c.getSessions() == null ) {
+		if(c == null || c.getSessions() == null || c.getSessions().size() == 0) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 		

@@ -60,6 +60,8 @@ public class Student implements Serializable{
 //	@OneToOne(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //	private StudyCalendar studyCalendar;
 	
+	@Column(name="status")
+	private String status;
 	
 	public Student() {
 		super();
@@ -67,7 +69,7 @@ public class Student implements Serializable{
 
 	public Student(Integer id, String firstName, String lastName, String username, String password,
 			boolean concetratedStudyHours, StudentCategory category, Double activityPoints, StudentActivity activity,
-			List<Subject> subjects) {
+			List<Subject> subjects, String status) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -79,6 +81,15 @@ public class Student implements Serializable{
 		this.activityPoints = activityPoints;
 		this.activity = activity;
 		this.subjects = subjects;
+		this.status = status;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Integer getId() {
@@ -183,10 +194,19 @@ public class Student implements Serializable{
 
 	
 
+	
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
+				+ ", password=" + password + ", concetratedStudyHours=" + concetratedStudyHours + ", category="
+				+ category + ", activityPoints=" + activityPoints + ", activity=" + activity + ", subjects= IZBACILA" 
+				+ "]";
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(activity, activityPoints, category, concetratedStudyHours, firstName, id, lastName,
-				password, subjects, username);
+				password, status, subjects, username);
 	}
 
 	@Override
@@ -202,15 +222,8 @@ public class Student implements Serializable{
 				&& category == other.category && concetratedStudyHours == other.concetratedStudyHours
 				&& Objects.equals(firstName, other.firstName) && Objects.equals(id, other.id)
 				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
-				&& Objects.equals(subjects, other.subjects) && Objects.equals(username, other.username);
-	}
-
-	@Override
-	public String toString() {
-		return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
-				+ ", password=" + password + ", concetratedStudyHours=" + concetratedStudyHours + ", category="
-				+ category + ", activityPoints=" + activityPoints + ", activity=" + activity + ", subjects= IZBACILA" 
-				+ "]";
+				&& Objects.equals(status, other.status) && Objects.equals(subjects, other.subjects)
+				&& Objects.equals(username, other.username);
 	}
 
 }
