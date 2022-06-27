@@ -10,33 +10,40 @@ public class SessionDto {
 	private float durationInHours;
 	private String obligationname;
 	private int priority;
+	private boolean isDone;
 
 	public SessionDto() {
 		super();
 	}	
-	
-	
-	public SessionDto(Integer id, LocalDate date, float durationInHours, String obligationname,
-			int priority) {
+
+	public SessionDto(Integer id, LocalDate date, float durationInHours, String obligationname, int priority,
+			boolean isDone) {
 		super();
 		this.id = id;
 		this.date = date;
 		this.durationInHours = durationInHours;
 		this.obligationname = obligationname;
 		this.priority = priority;
+		this.isDone = isDone;
 	}
 
+	public boolean isDone() {
+		return isDone;
+	}
 
+	public void setDone(boolean isDone) {
+		this.isDone = isDone;
+	}
 
+	public LocalDate getDate() {
+		return date;
+	}
 
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public LocalDate getDateAndTime() {
-		return date;
 	}
 	public void setDate(LocalDate date) {
 		this.date = date;

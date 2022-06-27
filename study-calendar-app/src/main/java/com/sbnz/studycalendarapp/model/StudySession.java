@@ -176,7 +176,7 @@ public class StudySession implements Serializable{
 		dto.setDurationInHours(durationInHours);
 		dto.setPriority(priority);
 		dto.setObligationname(obligation.getName());
-		
+		dto.setDone(isDone);
 		return dto;
 	}
 	

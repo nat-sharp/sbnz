@@ -2,11 +2,16 @@
     <mat-card>
         <mat-card-header>
             <mat-card-title>Student's Homepage</mat-card-title>
+            <div  *ngIf="statusPresent">
+                <h2>{{status}}</h2>
+            </div>
+            
         </mat-card-header>
         <br>
         <mat-card-content>
             <button mat-raised-button color="accent" type="button" class="fullWidth" (click)="calendar()">CALENDAR</button>
             <button mat-raised-button color="accent" type="button" class="fullWidth" (click)="subjects()">SUBJECTS</button>
+            <button mat-raised-button color="accent" type="button" class="fullWidth" (click)="showStatus()">MY STATUS</button>
             <button mat-raised-button color="accent" type="button" class="fullWidth" (click)="logOut()">LOG OUT</button>
         </mat-card-content>
     </mat-card>

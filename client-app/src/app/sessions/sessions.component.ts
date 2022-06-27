@@ -6,10 +6,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Session {
   id: number,
-  dateAndTime: string,
+  date: string,
   durationInHours: number,
   obligationname: string,
-  priority: number  //TODO MOZDA BOJA KAO PRIORITET
+  priority: number,  //TODO MOZDA BOJA KAO PRIORITET
+  done: boolean
 }
 
 const SESSIONS: Session[] = [];
@@ -23,13 +24,18 @@ export class SessionsComponent implements OnInit {
 
   columns = [
     {
-      columnDef: 'dateAndTime',
+      columnDef: 'date',
       header: 'Date',
-      cell: (element: Session) => `${element.dateAndTime == null ? '/' :
-        element.dateAndTime.split('T')[0].split('-')[2] + '.' +
-        element.dateAndTime.split('T')[0].split('-')[1] + '.' +
-        element.dateAndTime.split('T')[0].split('-')[0] + '. ' 
+      cell: (element: Session) => `${element.date == null ? '/' :
+        element.date.split('T')[0].split('-')[2] + '.' +
+        element.date.split('T')[0].split('-')[1] + '.' +
+        element.date.split('T')[0].split('-')[0] + '. ' 
         }`,
+    },
+     {
+      columnDef: 'finished',
+      header: 'Finished',
+      cell: (element: Session) => `${element.done ? 'Yes' : 'No'}`,
     },
     {
       columnDef: 'obligationname',
@@ -65,17 +71,39 @@ export class SessionsComponent implements OnInit {
     this.loadData();
   }
 
-
-  loadData() {
-    this.calendarService.createSessionsForStudent(this.username).subscribe(
+  setDone(row: Session){
+    this.calendarService.finishSession(row.id).subscribe(
       data => {
-        this.dataSource = data;
-        return
-      }, error => {
-        console.log(error.error);
-        this.openSnackBar("Error while creating sessions")
+        this.loadData();
+        this.openSnackBar(data);
       }
     )
+  }
+
+  loadData() {
+    this.calendarService.getSessionsForStudent(this.username).subscribe(
+      data => {
+        console.log("SUCCESS WHEN GETTING")
+        this.dataSource = data;
+        return;
+      }, error => {
+        console.log("Error", error);
+        this.openSnackBar("No existing sessions, need to create new ones")
+
+        this.calendarService.createSessionsForStudent(this.username).subscribe(
+          data => {
+            console.log("SUCCESS WHEN POSTING")
+            this.dataSource = data;
+            return
+          }, error => {
+            console.log(error.error);
+            this.openSnackBar("Error while creating sessions")
+          }
+        )
+      }
+    )
+
+   
     // let currentSessions : any[]= [];
     // console.log()
     // this.calendarService.getSessionsForStudent(this.username).subscribe(

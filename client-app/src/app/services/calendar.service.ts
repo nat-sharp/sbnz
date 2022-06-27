@@ -20,4 +20,12 @@ export class CalendarService {
     console.log("POZVAN GET")
     return this.http.get(this.URL + username);
   }
+
+  finishSession( id: number): Observable<any> {
+    return this.http.put(this.URL + 'setDone/'+ id, null, {responseType: 'text'})
+  }
+
+  getStudentStatus(username: string): Observable<any> {
+    return this.http.get(this.URL + 'status/' + username, {responseType: 'text'})
+  }
 }

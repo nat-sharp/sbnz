@@ -52,6 +52,14 @@ public class StudyCalendarService {
 		return this.studyCalendarRepository.findByStudentId(id);
 	}
 	
+	public StudySession getById(Integer id) {
+		return this.sessionRepository.getById(id);
+	}
+	
+	public StudySession save(StudySession s) {
+		return this.sessionRepository.save(s);
+	}
+	
 	public List<StudySession> getPrioritizedSessions(List<StudySession> sessions){
 		Collections.sort(sessions,  Collections.reverseOrder(new SortByPriority()));
 		return sessions.stream().map(s -> new StudySession(s, sessions.indexOf(s) + 1)).collect(Collectors.toList());
@@ -64,7 +72,11 @@ public class StudyCalendarService {
 		System.out.println(obligations);
 		Student student = obligations.get(0).getSubject().getStudent();
 		
-		StudyCalendar calendar = new StudyCalendar();
+		
+		StudyCalendar calendar = studyCalendarRepository.findByStudentId(student.getId());
+		if(calendar == null) {
+			calendar = new StudyCalendar();
+		}
 		calendar.setObligations(obligations);
 		calendar.setStudent(student);
 		
@@ -80,7 +92,7 @@ public class StudyCalendarService {
 		
 		////////////////////////////////////////////////////////////////////////		
 		
-		StudyCalendar sc = studyCalendarRepository.save(calendar);
+		calendar = studyCalendarRepository.save(calendar);
 		
 		for(StudySession session : calendar.getSessions()) {
 			session.setStudyCalendar(calendar);
@@ -88,7 +100,7 @@ public class StudyCalendarService {
 			
 		}
 		
-		return sc.getSessions();
+		return calendar.getSessions();
 	}
 	
 	private List<StudySession> getListFromMap(Map<LocalDate, ArrayList<StudySession>> sess) {
