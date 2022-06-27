@@ -6,4 +6,7 @@
 	<kbase name="studySessionsBase" packages="com.sbnz.rules.study-sessions">
    		<ksession name="studySessions"/>
 	</kbase>
+	<kbase name="backwardsBase" packages="com.sbnz.rules.backwards">
+   		<ksession name="backwards"/>
+	</kbase>
 </kmodule>

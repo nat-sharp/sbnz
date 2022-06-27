@@ -1,0 +1,122 @@
+package com.sbnz;
+
+import com.sbnz.studycalendarapp.model.*;
+package com.sbnz.studycalendarapp.enums.StudentActivity;
+
+rule "Start"
+	lock-on-active
+	when
+		eval(true)
+	then
+		insert(new Fact("Beginner status", "Student: BEGINNER"));
+		insert(new Fact("Student: BEGINNER", "Finished 0-5 sessions"));
+		
+		insert(new Fact("Neutral status", "Student: HARD WORKING"));
+		insert(new Fact("Student: HARD WORKING", "Finished 5-10 sessions"));
+		
+		insert(new Fact("Professional status", "Student: PROFESSIONAL"));
+		insert(new Fact("Student: PROFESSIONAL", "Finished 10+ sessions"));
+		
+		insert(new Fact("Slacker status", "Skipped 2+ obligations"));
+end
+
+rule "Pocetnik 1"
+	when
+		Student($id: id, activity == StudentActivity.BEGINNER)
+	then
+		insert(new Fact("Student: BEGINNER", $id.toString()));
+end
+
+rule "Pocetnik 2"
+	when
+		StudyCalendar($s: student, $sessions: sessions) //valjda ce uspeti
+		Number($value: intValue <= 5) from accumulate(
+			StudySession($s: this, isDone == true) from $sessions,
+			
+			count($s)
+		)
+	then
+		insert(new Fact("Finished 0-5 sessions", $s.getId().toString()));
+end
+
+rule "Neutral 1"
+	when
+		Student($id: id, activity == StudentActivity.HARD_WORKING)
+	then
+		insert(new Fact("Student: HARD WORKING", $id.toString()));
+end
+
+rule "Neutral 2"
+	when
+		StudyCalendar($s: student, $sessions: sessions) //valjda ce uspeti
+		Number($value: intValue > 5, $value: intValue <= 10 ) from accumulate(
+			StudySession($s: this, isDone == true) from $sessions,
+			
+			count($s)
+		)
+	then
+		insert(new Fact("Finished 5-10 sessions", $s.getId().toString()));
+end
+
+rule "Neutral 3"
+	when
+		StudyCalendar($s: student, $obligations: obligations) //valjda ce uspeti
+		Number($value: intValue > 2) from accumulate(
+			Obligation($o: this, finished == true) from $obligations,
+			
+			count($o)
+		)
+	then
+		insert(new Fact("Student: HARD WORKING", "Finished 2+ obligations");
+		insert(new Fact("Finished 2+ obligations", $s.getId().toString()));
+end
+
+rule "Professional 1"
+	when
+		Student($id: id, activity == StudentActivity.PROFESSIONAL)
+	then
+		insert(new Fact("Student: PROFESSIONAL", $id.toString()));
+end
+
+rule "Professional 2"
+	when
+		StudyCalendar($s: student, $sessions: sessions) //valjda ce uspeti
+			Number($value: intValue > 10) from accumulate(
+				StudySession($s: this, isDone == true) from $sessions,
+				
+				count($s)
+			)
+	then
+		insert(new Fact("Finished 10+ sessions", $s.getId()));
+end
+
+rule "Professional 3"
+	when
+		StudyCalendar($s: student, $obligations: obligations) //valjda ce uspeti
+		Number($value: intValue > 5) from accumulate(
+			Obligation($o: this, finished == true) from $obligations,
+			
+			count($o)
+		)
+	then
+		insert(new Fact("Student: PROFESSIONAL", "Finished 5+ obligations");
+		insert(new Fact("Finished 5+ obligations", $s.getId().toString()));
+end
+
+rule "Slacker 1"
+	when
+		StudyCalendar($s: student, $obligations: obligations) //valjda ce uspeti
+		Number($value: intValue > 2) from accumulate(
+			Obligation($o: this, skipped == true) from $obligations,
+			
+			count($o)
+		)
+	then
+		insert(new Fact("Skipped 2+ obligations", $s.getId().toString()));
+end
+
+query isThereAConnection(String x, String y )
+  Fact( x, y; )
+  or
+  ( Fact( z, y; ) and isThereAConnection(  x, z; ) )
+end

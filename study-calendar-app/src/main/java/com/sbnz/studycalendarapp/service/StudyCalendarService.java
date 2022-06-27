@@ -44,7 +44,7 @@ public class StudyCalendarService {
 	
 	@Autowired
 	public StudyCalendarService(KieContainer kieContainer) {
-		log.info("Initialising session for obligations.");
+		log.info("Initialising session for study calendar.");
 		this.kieContainer = kieContainer;
 	}
 	
